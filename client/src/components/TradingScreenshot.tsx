@@ -65,30 +65,30 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
         case "account-summary":
           return (
             <div className="bg-[#1a1a1a] rounded-xl p-6">
-              <h2 className="text-white text-xl font-semibold mb-6">{data.accountType || "Roth IRA"}</h2>
+              <h2 className="text-white text-lg font-semibold mb-6">{data.accountType || "Roth IRA"}</h2>
               <div className="space-y-4">
                 <div className="text-[#888888] text-base">Details</div>
                 <div className="flex justify-between items-center py-3 border-b border-[#2a2a2a]">
-                  <span className="text-[#cccccc]">Total value</span>
-                  <span className="text-white">${data.totalValue || "46,316.19"}</span>
+                  <span className="text-[#cccccc] text-sm">Total value</span>
+                  <span className="text-white text-sm">${data.totalValue || "46,316.19"}</span>
                 </div>
                 <div className="flex justify-between items-center py-3 border-b border-[#2a2a2a]">
-                  <span className="text-[#cccccc]">Shares owned</span>
-                  <span className="text-white">{data.sharesOwned || "1,504.261"}</span>
+                  <span className="text-[#cccccc] text-sm">Shares owned</span>
+                  <span className="text-white text-sm">{data.sharesOwned || "1,504.261"}</span>
                 </div>
                 <div className="flex justify-between items-center py-3 border-b border-[#2a2a2a]">
-                  <span className="text-[#cccccc]">Average cost</span>
-                  <span className="text-white">${data.averageCost || "8.19"}</span>
+                  <span className="text-[#cccccc] text-sm">Average cost</span>
+                  <span className="text-white text-sm">${data.averageCost || "8.19"}</span>
                 </div>
                 <div className="flex justify-between items-center py-3 border-b border-[#2a2a2a]">
-                  <span className="text-[#cccccc]">Total gain/loss</span>
-                  <span className="text-[#22c55e]">
+                  <span className="text-[#cccccc] text-sm">Total gain/loss</span>
+                  <span className="text-[#22c55e] text-sm">
                     +${data.totalGain || "34,002.50"} (+{data.percentage || "276.13"}%)
                   </span>
                 </div>
                 <div className="flex justify-between items-center py-3">
-                  <span className="text-[#cccccc]">Today's gain/loss</span>
-                  <span className="text-[#22c55e]">
+                  <span className="text-[#cccccc] text-sm">Today's gain/loss</span>
+                  <span className="text-[#22c55e] text-sm">
                     +${data.todayGain || "1,188.36"} (+2.63%)
                   </span>
                 </div>
@@ -245,35 +245,35 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
                   {data.symbol ? data.symbol.charAt(0) : "S"}
                 </div>
                 <div>
-                  <h2 className="text-white text-2xl font-bold">{data.symbol || "STOCK"}</h2>
-                  <p className="text-gray-400 text-sm">{data.accountType || "Company Name"}</p>
+                  <h2 className="text-white text-xl font-bold">{data.symbol || "STOCK"}</h2>
+                  <p className="text-gray-400 text-xs">{data.accountType || "Company Name"}</p>
                 </div>
               </div>
               <div className="space-y-4 mb-6">
                 <div>
-                  <p className="text-gray-400">Open P&L(USD)</p>
-                  <p className="text-green-400 text-2xl font-bold">+{data.profit || "93,235.48"} +{data.percentage || "8.92"}%</p>
+                  <p className="text-gray-400 text-sm">Open P&L(USD)</p>
+                  <p className="text-green-400 text-xl font-bold">+${data.profit || "93,235.48"} +{data.percentage || "8.92"}%</p>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-gray-400">Market Value</p>
-                    <p className="text-white text-lg">{data.marketValue || "1,138,176.52"}</p>
+                    <p className="text-gray-400 text-xs">Market Value</p>
+                    <p className="text-white text-base">${data.marketValue || "1,138,176.52"}</p>
                   </div>
                   <div>
-                    <p className="text-gray-400">Total Cost</p>
-                    <p className="text-white text-lg">{data.totalCost || "1,044,941.04"}</p>
+                    <p className="text-gray-400 text-xs">Total Cost</p>
+                    <p className="text-white text-base">${data.totalCost || "1,044,941.04"}</p>
                   </div>
                   <div>
-                    <p className="text-gray-400">Quantity</p>
-                    <p className="text-white text-lg">{data.quantity || "175,916"}</p>
+                    <p className="text-gray-400 text-xs">Quantity</p>
+                    <p className="text-white text-base">{data.quantity || "175,916"}</p>
                   </div>
                   <div>
-                    <p className="text-gray-400">Position Ratio ⓘ</p>
-                    <p className="text-white text-lg">{data.percentage || "100.00"}%</p>
+                    <p className="text-gray-400 text-xs">Position Ratio ⓘ</p>
+                    <p className="text-white text-base">{data.percentage || "100.00"}%</p>
                   </div>
                   <div>
-                    <p className="text-gray-400">Last Price</p>
-                    <p className="text-white text-lg">{data.currentPrice || "6.47"}</p>
+                    <p className="text-gray-400 text-xs">Last Price</p>
+                    <p className="text-white text-base">${data.currentPrice || "6.47"}</p>
                   </div>
                 </div>
               </div>

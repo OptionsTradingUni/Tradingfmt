@@ -169,26 +169,50 @@ export default function Generator() {
     if (!ref.current) return;
 
     try {
+      toast({
+        title: "Generating...",
+        description: "Preparing your screenshot",
+      });
+      
       // Wait for fonts and rendering to be ready
-      await new Promise(resolve => setTimeout(resolve, 300));
+      await new Promise(resolve => setTimeout(resolve, 500));
       if (document.fonts) {
         await document.fonts.ready;
       }
       
-      // Get computed background color from the element
-      const computedStyle = window.getComputedStyle(ref.current);
-      const backgroundColor = computedStyle.backgroundColor || '#ffffff';
+      // Get the actual element to capture
+      const element = ref.current;
+      const computedStyle = window.getComputedStyle(element);
       
-      const dataUrl = await toPng(ref.current, {
+      // Get background color - handle different element types
+      let backgroundColor = computedStyle.backgroundColor;
+      
+      // If background is transparent, check for parent or set default
+      if (!backgroundColor || backgroundColor === 'rgba(0, 0, 0, 0)' || backgroundColor === 'transparent') {
+        // Check if element has a background class
+        if (element.classList.contains('bg-black') || element.querySelector('[class*="bg-black"]')) {
+          backgroundColor = '#000000';
+        } else if (element.classList.contains('bg-white') || element.querySelector('[class*="bg-white"]')) {
+          backgroundColor = '#ffffff';
+        } else {
+          backgroundColor = '#ffffff';
+        }
+      }
+      
+      const dataUrl = await toPng(element, {
         quality: 1,
         pixelRatio: 3,
         skipFonts: false,
         cacheBust: true,
         backgroundColor: backgroundColor,
-        style: {
-          transform: 'scale(1)',
-        },
+        includeQueryParams: true,
+        fontEmbedCSS: '',
       });
+      
+      // Verify the data URL is valid
+      if (!dataUrl || dataUrl === 'data:,') {
+        throw new Error('Generated image is empty');
+      }
       
       const link = document.createElement('a');
       link.download = `${mode}-screenshot-${Date.now()}.png`;
@@ -203,7 +227,7 @@ export default function Generator() {
       console.error('Download error:', error);
       toast({
         title: "Error",
-        description: "Failed to download screenshot",
+        description: error instanceof Error ? error.message : "Failed to download screenshot. Please try again.",
         variant: "destructive",
       });
     }

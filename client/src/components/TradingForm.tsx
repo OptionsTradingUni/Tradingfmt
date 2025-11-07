@@ -62,7 +62,89 @@ export function TradingForm({ data, onChange }: TradingFormProps) {
   const { toast } = useToast();
 
   const updateField = (field: keyof TradingFormData, value: string) => {
-    onChange({ ...data, [field]: value });
+    const updatedData = { ...data, [field]: value };
+    
+    // Auto-calculate related fields based on what was updated
+    const parseNum = (str: string) => parseFloat(str.replace(/,/g, "")) || 0;
+    
+    // Calculate profit and percentage from proceeds and cost basis
+    if ((field === "proceeds" || field === "costBasis") && data.template === "gain-loss") {
+      const proceeds = field === "proceeds" ? parseNum(value) : parseNum(data.proceeds);
+      const costBasis = field === "costBasis" ? parseNum(value) : parseNum(data.costBasis);
+      
+      if (proceeds && costBasis) {
+        const profit = proceeds - costBasis;
+        const percentage = ((profit / costBasis) * 100).toFixed(2);
+        updatedData.profit = profit.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        updatedData.percentage = percentage;
+      }
+    }
+    
+    // Calculate market value from quantity and current price
+    if ((field === "quantity" || field === "currentPrice") && data.template === "stock-position") {
+      const quantity = field === "quantity" ? parseNum(value) : parseNum(data.quantity);
+      const currentPrice = field === "currentPrice" ? parseNum(value) : parseNum(data.currentPrice);
+      
+      if (quantity && currentPrice) {
+        updatedData.marketValue = (quantity * currentPrice).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+    }
+    
+    // Calculate total cost from quantity and average cost
+    if ((field === "quantity" || field === "averageCost") && (data.template === "stock-position" || data.template === "account-summary")) {
+      const quantity = field === "quantity" ? parseNum(value) : parseNum(data.quantity);
+      const averageCost = field === "averageCost" ? parseNum(value) : parseNum(data.averageCost);
+      
+      if (quantity && averageCost) {
+        updatedData.totalCost = (quantity * averageCost).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+    }
+    
+    // Calculate profit from market value and total cost
+    if ((field === "marketValue" || field === "totalCost") && data.template === "stock-position") {
+      const marketValue = field === "marketValue" ? parseNum(value) : parseNum(data.marketValue);
+      const totalCost = field === "totalCost" ? parseNum(value) : parseNum(data.totalCost);
+      
+      if (marketValue && totalCost) {
+        const profit = marketValue - totalCost;
+        const percentage = ((profit / totalCost) * 100).toFixed(2);
+        updatedData.profit = profit.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        updatedData.percentage = percentage;
+      }
+    }
+    
+    // Calculate options position values
+    if (data.template === "options-position") {
+      const quantity = parseNum(field === "quantity" ? value : data.quantity);
+      const currentPrice = parseNum(field === "currentPrice" ? value : data.currentPrice);
+      const averageCost = parseNum(field === "averageCost" ? value : data.averageCost);
+      
+      if (quantity && currentPrice) {
+        updatedData.marketValue = (quantity * currentPrice * 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+      
+      if (quantity && averageCost && currentPrice) {
+        const totalCost = quantity * averageCost * 100;
+        const marketValue = quantity * currentPrice * 100;
+        const profit = marketValue - totalCost;
+        const percentage = ((profit / totalCost) * 100).toFixed(2);
+        updatedData.profit = profit.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        updatedData.percentage = percentage;
+      }
+    }
+    
+    // Calculate filled order profit
+    if (data.template === "filled-order") {
+      const proceeds = parseNum(field === "proceeds" ? value : data.proceeds);
+      const costBasis = parseNum(field === "costBasis" ? value : data.costBasis);
+      
+      if (proceeds && costBasis) {
+        const profit = proceeds - costBasis;
+        updatedData.profit = profit.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+    }
+    
+    onChange(updatedData);
   };
 
   const fetchStockPrice = async () => {
