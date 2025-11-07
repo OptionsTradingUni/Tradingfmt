@@ -51,60 +51,56 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
       switch (template) {
         case "daily-pl":
           return (
-            <div className="bg-[#1a1a1a] w-[600px] min-h-[400px] p-8 font-sans">
-              <div className="bg-white rounded-2xl p-8 shadow-lg max-w-md mx-auto">
-                <h1 className="text-[#2F7D5E] text-4xl font-semibold mb-12 text-center">
-                  Daily P&L
-                </h1>
-                <div className="text-[#2F7D5E] text-6xl font-bold text-center tracking-tight">
-                  {data.profit || "11,415"}
-                </div>
+            <div className="bg-white rounded-2xl p-8 shadow-lg max-w-md mx-auto">
+              <h1 className="text-[#2F7D5E] text-4xl font-semibold mb-12 text-center">
+                Daily P&L
+              </h1>
+              <div className="text-[#2F7D5E] text-6xl font-bold text-center tracking-tight">
+                {data.profit || "11,415"}
               </div>
             </div>
           );
 
         case "account-summary":
           return (
-            <div className="bg-black w-[600px] min-h-[400px] p-6 font-sans">
-              <div className="bg-[#1a1a1a] rounded-xl p-6">
-                <h2 className="text-white text-2xl font-bold mb-6">{data.accountType || "ROTH IRA"}</h2>
-                <div className="space-y-4">
-                  <div className="text-[#888888] text-base">Details</div>
-                  <div className="flex justify-between items-center py-3 border-b border-[#2a2a2a]">
-                    <span className="text-[#cccccc] text-lg">Total value</span>
-                    <span className="text-white text-lg font-semibold">${data.totalValue || "46,316.19"}</span>
-                  </div>
-                  <div className="flex justify-between items-center py-3 border-b border-[#2a2a2a]">
-                    <span className="text-[#cccccc] text-lg">Shares owned</span>
-                    <span className="text-white text-lg font-semibold">{data.sharesOwned || "1,504.261"}</span>
-                  </div>
-                  <div className="flex justify-between items-center py-3 border-b border-[#2a2a2a]">
-                    <span className="text-[#cccccc] text-lg">Average cost</span>
-                    <span className="text-white text-lg font-semibold">${data.averageCost || "8.19"}</span>
-                  </div>
-                  <div className="flex justify-between items-center py-3 border-b border-[#2a2a2a]">
-                    <span className="text-[#cccccc] text-lg">Total gain/loss</span>
-                    <span className="text-[#22c55e] text-lg font-semibold">
-                      +${data.totalGain || "34,002.50"} (+{data.percentage || "276.13"}%)
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center py-3">
-                    <span className="text-[#cccccc] text-lg">Today's gain/loss</span>
-                    <span className="text-[#22c55e] text-lg font-semibold">
-                      +${data.todayGain || "1,188.36"} (+2.63%)
-                    </span>
-                  </div>
+            <div className="bg-[#1a1a1a] rounded-xl p-6">
+              <h2 className="text-white text-2xl font-bold mb-6">{data.accountType || "ROTH IRA"}</h2>
+              <div className="space-y-4">
+                <div className="text-[#888888] text-base">Details</div>
+                <div className="flex justify-between items-center py-3 border-b border-[#2a2a2a]">
+                  <span className="text-[#cccccc] text-lg">Total value</span>
+                  <span className="text-white text-lg font-semibold">${data.totalValue || "46,316.19"}</span>
                 </div>
-                <div className="text-[#666666] text-sm mt-6">
-                  As of {data.date || "Oct-28-2025 1:56 p.m. ET"}
+                <div className="flex justify-between items-center py-3 border-b border-[#2a2a2a]">
+                  <span className="text-[#cccccc] text-lg">Shares owned</span>
+                  <span className="text-white text-lg font-semibold">{data.sharesOwned || "1,504.261"}</span>
                 </div>
+                <div className="flex justify-between items-center py-3 border-b border-[#2a2a2a]">
+                  <span className="text-[#cccccc] text-lg">Average cost</span>
+                  <span className="text-white text-lg font-semibold">${data.averageCost || "8.19"}</span>
+                </div>
+                <div className="flex justify-between items-center py-3 border-b border-[#2a2a2a]">
+                  <span className="text-[#cccccc] text-lg">Total gain/loss</span>
+                  <span className="text-[#22c55e] text-lg font-semibold">
+                    +${data.totalGain || "34,002.50"} (+{data.percentage || "276.13"}%)
+                  </span>
+                </div>
+                <div className="flex justify-between items-center py-3">
+                  <span className="text-[#cccccc] text-lg">Today's gain/loss</span>
+                  <span className="text-[#22c55e] text-lg font-semibold">
+                    +${data.todayGain || "1,188.36"} (+2.63%)
+                  </span>
+                </div>
+              </div>
+              <div className="text-[#666666] text-sm mt-6">
+                As of {data.date || "Oct-28-2025 1:56 p.m. ET"}
               </div>
             </div>
           );
 
         case "gain-loss":
           return (
-            <div className="bg-white w-[600px] min-h-[500px] p-6 font-sans">
+            <div className="bg-white p-6 font-sans">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-semibold text-gray-900">Gain/Loss Summary</h2>
                 <button className="text-gray-500">▲</button>
@@ -153,7 +149,7 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
 
         case "realized-pl":
           return (
-            <div className="bg-black w-[600px] min-h-[200px] p-6 font-sans">
+            <div className="bg-black p-6 font-sans">
               <div className="flex items-center gap-2 mb-4">
                 <button className="text-white">←</button>
                 <h2 className="text-white text-xl font-semibold">Realized P&L</h2>
@@ -168,28 +164,26 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
 
         case "position-details":
           return (
-            <div className="bg-[#0a0a0a] w-[600px] min-h-[400px] p-6 font-sans">
-              <div className="bg-[#1a1a1a] rounded-lg p-6">
-                <div className="flex justify-between items-center mb-6">
-                  <div className="flex items-center gap-3">
-                    <div className="bg-gradient-to-br from-purple-500 to-blue-500 w-12 h-12 rounded-lg"></div>
-                    <div className="text-white text-xl font-bold">Today</div>
-                  </div>
+            <div className="bg-[#1a1a1a] rounded-lg p-6">
+              <div className="flex justify-between items-center mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="bg-gradient-to-br from-purple-500 to-blue-500 w-12 h-12 rounded-lg"></div>
+                  <div className="text-white text-xl font-bold">Today</div>
                 </div>
-                <div className="flex items-baseline gap-2 mb-1">
-                  <div className="text-green-400 text-2xl">▲</div>
-                  <div className="text-green-400 text-4xl font-bold">${data.profit || "8,928.80"}</div>
-                </div>
-                <div className="text-gray-400 text-sm mb-6">
-                  {data.accountType || "Investing"} / {data.accountType || "Roth IRA"} / Credit Card
-                </div>
+              </div>
+              <div className="flex items-baseline gap-2 mb-1">
+                <div className="text-green-400 text-2xl">▲</div>
+                <div className="text-green-400 text-4xl font-bold">${data.profit || "8,928.80"}</div>
+              </div>
+              <div className="text-gray-400 text-sm mb-6">
+                {data.accountType || "Investing"} / {data.accountType || "Roth IRA"} / Credit Card
               </div>
             </div>
           );
 
         case "portfolio-value":
           return (
-            <div className="bg-black w-[600px] min-h-[300px] p-8 font-sans">
+            <div className="bg-black p-8 font-sans">
               <div className="text-white text-6xl font-bold mb-4">
                 ${data.totalValue || "51,231.80"}
               </div>
@@ -203,7 +197,7 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
 
         case "profit-chart":
           return (
-            <div className="bg-white w-[600px] min-h-[600px] p-6 font-sans">
+            <div className="bg-white p-6 font-sans">
               <div className="flex items-center justify-between mb-4">
                 <button className="text-gray-900 text-2xl">←</button>
                 <h2 className="text-gray-900 text-xl font-semibold">Realized profit & loss</h2>
@@ -244,14 +238,14 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
 
         case "stock-position":
           return (
-            <div className="bg-black w-[600px] min-h-[700px] p-6 font-sans">
+            <div className="bg-black p-6 font-sans">
               <div className="flex items-center gap-2 mb-6">
                 <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white text-xl font-bold">
-                  L
+                  {(data.symbol || "META").charAt(0)}
                 </div>
                 <div>
-                  <h2 className="text-white text-2xl font-bold">{data.symbol || "BULG"}</h2>
-                  <p className="text-gray-400 text-sm">{data.accountType || "Leverage Shares 2X Long BULL Daily ETF"}</p>
+                  <h2 className="text-white text-2xl font-bold">{data.symbol || "META"}</h2>
+                  <p className="text-gray-400 text-sm">{data.accountType || "Meta Platforms Inc."}</p>
                 </div>
               </div>
               <div className="space-y-4 mb-6">
@@ -318,7 +312,7 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
 
         case "watchlist-item":
           return (
-            <div className="bg-black w-[600px] min-h-[80px] p-4 font-sans">
+            <div className="bg-black p-4 font-sans">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="text-white">
@@ -342,10 +336,10 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
 
         case "options-position":
           return (
-            <div className="bg-white w-[600px] min-h-[600px] p-6 font-sans">
+            <div className="bg-white p-6 font-sans">
               <div className="border-b pb-4 mb-4">
                 <p className="text-gray-500 text-sm mb-2">Your position</p>
-                <h2 className="text-gray-900 text-2xl font-bold mb-4">{data.symbol || "LLY"} ${data.strikePrice || "1,000"} Call {data.expirationDate || "11/21"}</h2>
+                <h2 className="text-gray-900 text-2xl font-bold mb-4">{data.symbol || "META"} ${data.strikePrice || "1,000"} Call {data.expirationDate || "11/21"}</h2>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-gray-600 mb-1">Contracts</p>
@@ -372,11 +366,11 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
                     <p className="text-gray-900">{data.expirationDate || "11/7"}</p>
                   </div>
                   <div>
-                    <p className="text-gray-600 mb-1">LLY breakeven price</p>
+                    <p className="text-gray-600 mb-1">{data.symbol || "META"} breakeven price</p>
                     <p className="text-gray-900">${data.strikePrice || "930.15"}</p>
                   </div>
                   <div>
-                    <p className="text-gray-600 mb-1">Current LLY price</p>
+                    <p className="text-gray-600 mb-1">Current {data.symbol || "META"} price</p>
                     <p className="text-gray-900">${data.currentPrice || "952.14"}</p>
                   </div>
                   <div className="col-span-2">
@@ -401,7 +395,7 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
 
         case "day-pl-simple":
           return (
-            <div className="bg-white w-[600px] min-h-[150px] p-6 font-sans">
+            <div className="bg-white p-6 font-sans">
               <div className="flex justify-between items-center">
                 <div>
                   <p className="text-gray-600 text-lg mb-1">Open PL</p>
@@ -417,7 +411,7 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
 
         case "brokerage-account":
           return (
-            <div className="bg-black w-[600px] min-h-[700px] p-6 font-sans">
+            <div className="bg-black p-6 font-sans">
               <div className="border-b border-gray-800 pb-4 mb-4">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex gap-4">
@@ -474,7 +468,7 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
 
         case "filled-order":
           return (
-            <div className="bg-white w-[600px] min-h-[700px] p-6 font-sans">
+            <div className="bg-white p-6 font-sans">
               <div className="border-b pb-4 mb-4">
                 <button className="text-gray-900 text-xl mb-4">‹</button>
                 <h2 className="text-gray-900 text-xl font-bold mb-2">Filled order</h2>

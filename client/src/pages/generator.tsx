@@ -286,7 +286,7 @@ export default function Generator() {
           </div>
           
           {/* Hidden trading screenshot for embedded image generation */}
-          <div className="absolute opacity-0 pointer-events-none" style={{ left: '-100%', top: 0 }}>
+          <div style={{ position: 'fixed', left: '-9999px', top: '-9999px', visibility: 'hidden' }}>
             <TradingScreenshot
               ref={tradingScreenshotRef}
               template={tradingData.template}
