@@ -4,29 +4,26 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, X } from "lucide-react";
-import youngTrader from '@assets/generated_images/Young_trader_avatar_21c86166.png';
-import womanTrader from '@assets/generated_images/Woman_trader_avatar_d2763a2e.png';
-import businessman from '@assets/generated_images/Businessman_avatar_4ef3acbe.png';
-import youngProfessional from '@assets/generated_images/Young_professional_avatar_1ceab23f.png';
-import experiencedTrader from '@assets/generated_images/Experienced_trader_avatar_4275ec5b.png';
 
-const AVATAR_PRESETS = [
-  { name: "Young Trader", url: youngTrader },
-  { name: "Woman Trader", url: womanTrader },
-  { name: "Businessman", url: businessman },
-  { name: "Young Professional", url: youngProfessional },
-  { name: "Experienced Trader", url: experiencedTrader },
+const AVATAR_COLORS = [
+  { name: "Blurple", value: "#5865F2" },
+  { name: "Green", value: "#57F287" },
+  { name: "Yellow", value: "#FEE75C" },
+  { name: "Pink", value: "#EB459E" },
+  { name: "Red", value: "#ED4245" },
 ];
 
 const EMOJI_PRESETS = ["💰", "🔥", "😊", "👍", "🚀", "💪", "🎯", "⭐"];
 
 export interface DiscordFormData {
   username: string;
-  avatarUrl: string;
+  avatarColor: string;
   message: string;
   timestamp: string;
   reactions: { emoji: string; count: number }[];
   verified: boolean;
+  channelName: string;
+  embeddedImageDataUrl?: string;
 }
 
 interface DiscordFormProps {
@@ -73,22 +70,36 @@ export function DiscordForm({ data, onChange }: DiscordFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label data-testid="label-avatar">Avatar</Label>
-        <Select value={data.avatarUrl} onValueChange={(value) => updateField('avatarUrl', value)}>
-          <SelectTrigger data-testid="select-avatar">
-            <SelectValue placeholder="Select avatar" />
+        <Label data-testid="label-avatar-color">Avatar Color</Label>
+        <Select value={data.avatarColor} onValueChange={(value) => updateField('avatarColor', value)}>
+          <SelectTrigger data-testid="select-avatar-color">
+            <SelectValue placeholder="Select avatar color" />
           </SelectTrigger>
           <SelectContent>
-            {AVATAR_PRESETS.map((preset) => (
-              <SelectItem key={preset.url} value={preset.url}>
+            {AVATAR_COLORS.map((color) => (
+              <SelectItem key={color.value} value={color.value}>
                 <div className="flex items-center gap-2">
-                  <img src={preset.url} alt={preset.name} className="w-6 h-6 rounded-full" />
-                  {preset.name}
+                  <div 
+                    className="w-4 h-4 rounded-full" 
+                    style={{ backgroundColor: color.value }}
+                  />
+                  {color.name}
                 </div>
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="channelName" data-testid="label-channel-name">Channel Name</Label>
+        <Input
+          id="channelName"
+          data-testid="input-channel-name"
+          value={data.channelName}
+          onChange={(e) => updateField('channelName', e.target.value)}
+          placeholder="e.g., profits"
+        />
       </div>
 
       <div className="space-y-2">

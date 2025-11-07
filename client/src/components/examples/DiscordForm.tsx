@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { DiscordForm, type DiscordFormData } from '../DiscordForm';
-import youngTrader from '@assets/generated_images/Young_trader_avatar_21c86166.png';
 
 export default function DiscordFormExample() {
   const [data, setData] = useState<DiscordFormData>({
     username: "Dr. Sugandese",
-    avatarUrl: youngTrader,
+    avatarColor: "#5865F2",
     message: "first day in here😂😂 i regret not going heavier but ah well nice one bro @MDT™",
     timestamp: "11:05 AM",
+    channelName: "profits",
     reactions: [
       { emoji: "💰", count: 1 },
       { emoji: "🔥", count: 2 }

@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,11 +9,6 @@ import { TradingScreenshot } from "@/components/TradingScreenshot";
 import { TradingForm, type TradingFormData } from "@/components/TradingForm";
 import { toPng } from "html-to-image";
 import { useToast } from "@/hooks/use-toast";
-import youngTrader from '@assets/generated_images/Young_trader_avatar_21c86166.png';
-import womanTrader from '@assets/generated_images/Woman_trader_avatar_d2763a2e.png';
-import businessman from '@assets/generated_images/Businessman_avatar_4ef3acbe.png';
-import youngProfessional from '@assets/generated_images/Young_professional_avatar_1ceab23f.png';
-import experiencedTrader from '@assets/generated_images/Experienced_trader_avatar_4275ec5b.png';
 
 const USERNAMES = [
   "Dr. Sugandese", "Luke587", "Fistful of Dollars", "Convertible",
@@ -29,7 +24,7 @@ const MESSAGES = [
   "🔥🔥🔥 killed it today thanks to @{mention}",
 ];
 
-const AVATARS = [youngTrader, womanTrader, businessman, youngProfessional, experiencedTrader];
+const AVATAR_COLORS = ["#5865F2", "#57F287", "#FEE75C", "#EB459E", "#ED4245"];
 
 export default function Generator() {
   const { toast } = useToast();
@@ -40,14 +35,16 @@ export default function Generator() {
   
   const [discordData, setDiscordData] = useState<DiscordFormData>({
     username: "Dr. Sugandese",
-    avatarUrl: youngTrader,
+    avatarColor: "#5865F2",
     message: "first day in here😂😂 i regret not going heavier but ah well nice one bro @MDT™",
     timestamp: "11:05 AM",
+    channelName: "profits",
     reactions: [
       { emoji: "💰", count: 1 },
       { emoji: "🔥", count: 2 }
     ],
-    verified: true
+    verified: true,
+    embeddedImageDataUrl: undefined
   });
 
   const [tradingData, setTradingData] = useState<TradingFormData>({
@@ -65,13 +62,35 @@ export default function Generator() {
     costBasis: "14,592.49"
   });
 
+  const tradingScreenshotRef = useRef<HTMLDivElement>(null);
+
+  // Generate embedded trading image whenever trading data changes
+  useEffect(() => {
+    const generateEmbeddedImage = async () => {
+      if (!tradingScreenshotRef.current) return;
+      
+      try {
+        const dataUrl = await toPng(tradingScreenshotRef.current, {
+          quality: 1,
+          pixelRatio: 2,
+        });
+        setDiscordData(prev => ({ ...prev, embeddedImageDataUrl: dataUrl }));
+      } catch (error) {
+        console.error('Failed to generate embedded image:', error);
+      }
+    };
+
+    const timeoutId = setTimeout(generateEmbeddedImage, 100);
+    return () => clearTimeout(timeoutId);
+  }, [tradingData]);
+
   const randomizeDiscord = () => {
     const username = USERNAMES[Math.floor(Math.random() * USERNAMES.length)];
     const message = MESSAGES[Math.floor(Math.random() * MESSAGES.length)].replace(
       /{mention}/g,
       "@" + USERNAMES[Math.floor(Math.random() * USERNAMES.length)]
     );
-    const avatar = AVATARS[Math.floor(Math.random() * AVATARS.length)];
+    const avatarColor = AVATAR_COLORS[Math.floor(Math.random() * AVATAR_COLORS.length)];
     const hours = Math.floor(Math.random() * 12) + 1;
     const minutes = Math.floor(Math.random() * 60);
     const ampm = Math.random() > 0.5 ? "AM" : "PM";
@@ -80,7 +99,7 @@ export default function Generator() {
       ...discordData,
       username,
       message,
-      avatarUrl: avatar,
+      avatarColor,
       timestamp: `${hours}:${minutes.toString().padStart(2, '0')} ${ampm}`,
       verified: Math.random() > 0.5,
     });
@@ -195,11 +214,13 @@ export default function Generator() {
                 <DiscordMessage
                   ref={discordRef}
                   username={discordData.username}
-                  avatarUrl={discordData.avatarUrl}
+                  avatarColor={discordData.avatarColor}
                   message={discordData.message}
                   timestamp={discordData.timestamp}
+                  channelName={discordData.channelName}
                   reactions={discordData.reactions}
                   verified={discordData.verified}
+                  embeddedImageUrl={discordData.embeddedImageDataUrl}
                 />
               ) : (
                 <TradingScreenshot
@@ -221,6 +242,27 @@ export default function Generator() {
                 />
               )}
             </Card>
+          </div>
+          
+          {/* Hidden trading screenshot for embedded image generation */}
+          <div className="fixed -left-[9999px]">
+            <TradingScreenshot
+              ref={tradingScreenshotRef}
+              template={tradingData.template}
+              data={{
+                profit: tradingData.profit,
+                percentage: tradingData.percentage,
+                accountType: tradingData.accountType,
+                totalValue: tradingData.totalValue,
+                sharesOwned: tradingData.sharesOwned,
+                averageCost: tradingData.averageCost,
+                totalGain: tradingData.totalGain,
+                todayGain: tradingData.todayGain,
+                date: tradingData.date,
+                proceeds: tradingData.proceeds,
+                costBasis: tradingData.costBasis,
+              }}
+            />
           </div>
         </div>
       </main>
