@@ -91,7 +91,6 @@ export default function Generator() {
         const dataUrl = await toPng(tradingScreenshotRef.current, {
           quality: 1,
           pixelRatio: 2,
-          skipFonts: true,
           cacheBust: true,
         });
         setDiscordData(prev => ({ ...prev, embeddedImageDataUrl: dataUrl }));
@@ -100,7 +99,7 @@ export default function Generator() {
       }
     };
 
-    const timeoutId = setTimeout(generateEmbeddedImage, 100);
+    const timeoutId = setTimeout(generateEmbeddedImage, 500);
     return () => clearTimeout(timeoutId);
   }, [tradingData]);
 
@@ -232,60 +231,62 @@ export default function Generator() {
           <div className="flex items-start justify-center">
             <Card className="p-8 inline-block">
               <h2 className="text-lg font-semibold mb-4" data-testid="text-preview-title">Preview</h2>
-              {mode === "discord" ? (
-                <DiscordMessage
-                  ref={discordRef}
-                  username={discordData.username}
-                  avatarColor={discordData.avatarColor}
-                  message={discordData.message}
-                  timestamp={discordData.timestamp}
-                  channelName={discordData.channelName}
-                  reactions={discordData.reactions}
-                  verified={discordData.verified}
-                  embeddedImageUrl={discordData.embeddedImageDataUrl}
-                  notificationCount={discordData.notificationCount}
-                  showNotificationBadge={discordData.showNotificationBadge}
-                  typingUsers={discordData.typingUsers}
-                  showTypingIndicator={discordData.showTypingIndicator}
-                  backgroundTheme={discordData.backgroundTheme}
-                />
-              ) : (
-                <TradingScreenshot
-                  ref={tradingRef}
-                  template={tradingData.template}
-                  data={{
-                    profit: tradingData.profit,
-                    percentage: tradingData.percentage,
-                    accountType: tradingData.accountType,
-                    totalValue: tradingData.totalValue,
-                    sharesOwned: tradingData.sharesOwned,
-                    averageCost: tradingData.averageCost,
-                    totalGain: tradingData.totalGain,
-                    todayGain: tradingData.todayGain,
-                    date: tradingData.date,
-                    proceeds: tradingData.proceeds,
-                    costBasis: tradingData.costBasis,
-                    symbol: tradingData.symbol,
-                    quantity: tradingData.quantity,
-                    currentPrice: tradingData.currentPrice,
-                    openPL: tradingData.openPL,
-                    dayRPL: tradingData.dayRPL,
-                    marketValue: tradingData.marketValue,
-                    totalCost: tradingData.totalCost,
-                    strikePrice: tradingData.strikePrice,
-                    expirationDate: tradingData.expirationDate,
-                    contractType: tradingData.contractType,
-                    filledPrice: tradingData.filledPrice,
-                    filledQuantity: tradingData.filledQuantity,
-                    orderType: tradingData.orderType,
-                  }}
-                />
-              )}
+              <div className="inline-block">
+                {mode === "discord" ? (
+                  <DiscordMessage
+                    ref={discordRef}
+                    username={discordData.username}
+                    avatarColor={discordData.avatarColor}
+                    message={discordData.message}
+                    timestamp={discordData.timestamp}
+                    channelName={discordData.channelName}
+                    reactions={discordData.reactions}
+                    verified={discordData.verified}
+                    embeddedImageUrl={discordData.embeddedImageDataUrl}
+                    notificationCount={discordData.notificationCount}
+                    showNotificationBadge={discordData.showNotificationBadge}
+                    typingUsers={discordData.typingUsers}
+                    showTypingIndicator={discordData.showTypingIndicator}
+                    backgroundTheme={discordData.backgroundTheme}
+                  />
+                ) : (
+                  <TradingScreenshot
+                    ref={tradingRef}
+                    template={tradingData.template}
+                    data={{
+                      profit: tradingData.profit,
+                      percentage: tradingData.percentage,
+                      accountType: tradingData.accountType,
+                      totalValue: tradingData.totalValue,
+                      sharesOwned: tradingData.sharesOwned,
+                      averageCost: tradingData.averageCost,
+                      totalGain: tradingData.totalGain,
+                      todayGain: tradingData.todayGain,
+                      date: tradingData.date,
+                      proceeds: tradingData.proceeds,
+                      costBasis: tradingData.costBasis,
+                      symbol: tradingData.symbol,
+                      quantity: tradingData.quantity,
+                      currentPrice: tradingData.currentPrice,
+                      openPL: tradingData.openPL,
+                      dayRPL: tradingData.dayRPL,
+                      marketValue: tradingData.marketValue,
+                      totalCost: tradingData.totalCost,
+                      strikePrice: tradingData.strikePrice,
+                      expirationDate: tradingData.expirationDate,
+                      contractType: tradingData.contractType,
+                      filledPrice: tradingData.filledPrice,
+                      filledQuantity: tradingData.filledQuantity,
+                      orderType: tradingData.orderType,
+                    }}
+                  />
+                )}
+              </div>
             </Card>
           </div>
           
           {/* Hidden trading screenshot for embedded image generation */}
-          <div className="fixed -left-[9999px]">
+          <div className="absolute opacity-0 pointer-events-none" style={{ left: '-100%', top: 0 }}>
             <TradingScreenshot
               ref={tradingScreenshotRef}
               template={tradingData.template}
