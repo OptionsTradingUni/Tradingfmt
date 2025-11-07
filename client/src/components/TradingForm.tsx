@@ -33,6 +33,7 @@ export interface TradingFormData {
   filledPrice: string;
   filledQuantity: string;
   orderType: string;
+  timePeriod: string;
 }
 
 interface TradingFormProps {
@@ -143,9 +144,9 @@ export function TradingForm({ data, onChange }: TradingFormProps) {
       case "position-details":
         return ["profit", "accountType"];
       case "portfolio-value":
-        return ["totalValue", "todayGain", "percentage"];
+        return ["totalValue", "todayGain", "percentage", "timePeriod"];
       case "profit-chart":
-        return ["profit", "percentage"];
+        return ["profit", "percentage", "timePeriod"];
       case "stock-position":
         return ["symbol", "accountType", "profit", "percentage", "marketValue", "totalCost", "quantity", "currentPrice", "averageCost", "date"];
       case "watchlist-item":
@@ -506,6 +507,19 @@ export function TradingForm({ data, onChange }: TradingFormProps) {
             value={data.orderType}
             onChange={(e) => updateField('orderType', e.target.value)}
             placeholder="e.g., Sell, Buy"
+          />
+        </div>
+      )}
+
+      {relevantFields.includes("timePeriod") && (
+        <div className="space-y-2">
+          <Label htmlFor="timePeriod" data-testid="label-time-period">Time Period Label</Label>
+          <Input
+            id="timePeriod"
+            data-testid="input-time-period"
+            value={data.timePeriod}
+            onChange={(e) => updateField('timePeriod', e.target.value)}
+            placeholder="e.g., Today, YTD, 3M, past week"
           />
         </div>
       )}

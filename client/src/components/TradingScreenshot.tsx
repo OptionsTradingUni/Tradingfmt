@@ -42,6 +42,7 @@ export interface TradingScreenshotProps {
     filledPrice?: string;
     filledQuantity?: string;
     orderType?: string;
+    timePeriod?: string;
   };
 }
 
@@ -51,11 +52,11 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
       switch (template) {
         case "daily-pl":
           return (
-            <div className="bg-white rounded-2xl p-8 shadow-lg max-w-md mx-auto">
-              <h1 className="text-[#2F7D5E] text-4xl font-semibold mb-12 text-center">
+            <div className="bg-white rounded-2xl p-8 shadow-lg max-w-md mx-auto" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
+              <h1 className="text-[#2F7D5E] font-semibold mb-12 text-center" style={{ fontSize: '36px', letterSpacing: '-0.01em' }}>
                 Daily P&L
               </h1>
-              <div className="text-[#2F7D5E] text-6xl font-bold text-center tracking-tight">
+              <div className="text-[#2F7D5E] font-bold text-center" style={{ fontSize: '60px', letterSpacing: '-0.03em', lineHeight: '1' }}>
                 {data.profit || "11,415"}
               </div>
             </div>
@@ -149,15 +150,15 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
 
         case "realized-pl":
           return (
-            <div className="bg-black p-6 font-sans">
+            <div className="bg-black p-6" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
               <div className="flex items-center gap-2 mb-4">
-                <button className="text-white">←</button>
-                <h2 className="text-white text-xl font-semibold">Realized P&L</h2>
+                <button className="text-white text-lg">←</button>
+                <h2 className="text-white text-lg font-semibold" style={{ letterSpacing: '-0.01em' }}>Realized P&L</h2>
               </div>
               <div className="mb-2">
-                <div className="text-gray-400 text-sm mb-1">{data.date || "11/01/2025 - 11/05/2025"} Realized P&L ↑</div>
-                <div className="text-green-500 text-4xl font-bold">+${data.profit || "51,985.83"}</div>
-                <div className="text-gray-400 text-sm">Range: {data.date || "11/01/2025 - 11/05/2025"}</div>
+                <div className="text-gray-400 text-xs mb-1" style={{ letterSpacing: '0.01em' }}>{data.date || "Oct-28-2025 1:56 p.m. ET"} Realized P&L ↑</div>
+                <div className="text-green-500 font-bold" style={{ fontSize: '44px', letterSpacing: '-0.02em', lineHeight: '1.1' }}>+${data.profit || "11,415"}</div>
+                <div className="text-gray-400 text-xs mt-1" style={{ letterSpacing: '0.01em' }}>Range: {data.date || "Oct-28-2025 1:56 p.m. ET"}</div>
               </div>
             </div>
           );
@@ -183,14 +184,14 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
 
         case "portfolio-value":
           return (
-            <div className="bg-black p-8 font-sans">
-              <div className="text-white text-6xl font-bold mb-4">
+            <div className="bg-black p-8" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
+              <div className="text-white font-bold mb-4" style={{ fontSize: '56px', letterSpacing: '-0.03em', lineHeight: '1' }}>
                 ${data.totalValue || "51,231.80"}
               </div>
-              <div className="flex items-center gap-2 text-green-500 text-3xl font-semibold">
+              <div className="flex items-center gap-2 text-green-500 font-semibold" style={{ fontSize: '28px', letterSpacing: '-0.01em' }}>
                 <span>▲</span>
                 <span>${data.todayGain || "30,697.16"} ({data.percentage || "149.49"}%)</span>
-                <span className="text-gray-400 text-2xl ml-2">Today</span>
+                <span className="text-gray-400 ml-2" style={{ fontSize: '24px' }}>{data.timePeriod || "Today"}</span>
               </div>
             </div>
           );
@@ -220,7 +221,7 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
                 </div>
                 <div className="flex items-center gap-2 text-green-600 text-lg">
                   <span>▲ {data.percentage || "17.72"}%</span>
-                  <span className="text-gray-500">Year to date</span>
+                  <span className="text-gray-500">{data.timePeriod || "Year to date"}</span>
                 </div>
               </div>
               <div className="relative h-64 flex items-end justify-between gap-1">

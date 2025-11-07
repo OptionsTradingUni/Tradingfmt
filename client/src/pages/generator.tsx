@@ -77,7 +77,8 @@ export default function Generator() {
     contractType: "Limit sell",
     filledPrice: "1.85",
     filledQuantity: "3 contracts at $1.85",
-    orderType: "Sell"
+    orderType: "Sell",
+    timePeriod: "Today"
   });
 
   const tradingScreenshotRef = useRef<HTMLDivElement>(null);
@@ -88,13 +89,19 @@ export default function Generator() {
       if (!tradingScreenshotRef.current) return;
       
       try {
+        // Wait for fonts and DOM to be fully ready
+        await new Promise(resolve => setTimeout(resolve, 100));
+        if (document.fonts) {
+          await document.fonts.ready;
+        }
+        
         const dataUrl = await toPng(tradingScreenshotRef.current, {
-          quality: 0.95,
-          pixelRatio: 2,
+          quality: 1,
+          pixelRatio: 4,
           cacheBust: true,
-          skipFonts: true,
-          includeQueryParams: false,
-          skipAutoScale: false,
+          skipFonts: false,
+          fontEmbedCSS: '',
+          backgroundColor: tradingScreenshotRef.current.style.backgroundColor || '#000000',
         });
         setDiscordData(prev => ({ ...prev, embeddedImageDataUrl: dataUrl }));
       } catch (error) {
@@ -103,7 +110,7 @@ export default function Generator() {
       }
     };
 
-    const timeoutId = setTimeout(generateEmbeddedImage, 1000);
+    const timeoutId = setTimeout(generateEmbeddedImage, 800);
     return () => clearTimeout(timeoutId);
   }, [tradingData]);
 
@@ -136,6 +143,8 @@ export default function Generator() {
   const randomizeTrading = () => {
     const profit = (Math.random() * 50000 + 1000).toFixed(2);
     const percentage = (Math.random() * 300 + 10).toFixed(2);
+    const timePeriods = ["Today", "YTD", "3M", "past week", "1W", "1M", "Year to date"];
+    const timePeriod = timePeriods[Math.floor(Math.random() * timePeriods.length)];
     
     setTradingData({
       ...tradingData,
@@ -144,6 +153,7 @@ export default function Generator() {
       totalValue: (Math.random() * 100000 + 10000).toFixed(2),
       totalGain: (Math.random() * 50000 + 5000).toFixed(2),
       todayGain: (Math.random() * 10000 + 500).toFixed(2),
+      timePeriod: timePeriod,
     });
     
     toast({
@@ -157,12 +167,17 @@ export default function Generator() {
     if (!ref.current) return;
 
     try {
+      // Wait for fonts to be ready
+      if (document.fonts) {
+        await document.fonts.ready;
+      }
+      
       const dataUrl = await toPng(ref.current, {
         quality: 1,
-        pixelRatio: 2,
+        pixelRatio: 3,
         skipFonts: false,
         cacheBust: true,
-        preferredFontFormat: 'woff2',
+        fontEmbedCSS: '',
       });
       
       const link = document.createElement('a');
@@ -231,6 +246,22 @@ export default function Generator() {
                 Download PNG
               </Button>
             </div>
+
+            {mode === "trading" && (
+              <Card className="p-4 bg-muted">
+                <h3 className="font-semibold text-sm mb-3" data-testid="text-template-guide">Template Guide</h3>
+                <div className="space-y-2 text-xs text-muted-foreground">
+                  <p><strong>Daily P&L:</strong> Simple profit display</p>
+                  <p><strong>Portfolio Value:</strong> Total account value with gains</p>
+                  <p><strong>Profit Chart:</strong> Performance over time with graph</p>
+                  <p><strong>Stock Position:</strong> Detailed position with bid/ask</p>
+                  <p><strong>Options Position:</strong> Options contracts details</p>
+                  <p><strong>Filled Order:</strong> Completed trade details</p>
+                  <p><strong>Realized P&L:</strong> Closed positions profit</p>
+                  <p><strong>Day P&L Simple:</strong> Open/Day P&L comparison</p>
+                </div>
+              </Card>
+            )}
           </div>
 
           <div className="flex items-start justify-center">
@@ -283,6 +314,7 @@ export default function Generator() {
                       filledPrice: tradingData.filledPrice,
                       filledQuantity: tradingData.filledQuantity,
                       orderType: tradingData.orderType,
+                      timePeriod: tradingData.timePeriod,
                     }}
                   />
                 )}
@@ -320,6 +352,7 @@ export default function Generator() {
                 filledPrice: tradingData.filledPrice,
                 filledQuantity: tradingData.filledQuantity,
                 orderType: tradingData.orderType,
+                timePeriod: tradingData.timePeriod,
               }}
             />
           </div>
