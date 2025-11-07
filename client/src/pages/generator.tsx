@@ -89,19 +89,21 @@ export default function Generator() {
       
       try {
         const dataUrl = await toPng(tradingScreenshotRef.current, {
-          quality: 1,
+          quality: 0.95,
           pixelRatio: 2,
           cacheBust: true,
-          skipFonts: false,
-          preferredFontFormat: 'woff2',
+          skipFonts: true,
+          includeQueryParams: false,
+          skipAutoScale: false,
         });
         setDiscordData(prev => ({ ...prev, embeddedImageDataUrl: dataUrl }));
       } catch (error) {
         console.error('Failed to generate embedded image:', error);
+        setDiscordData(prev => ({ ...prev, embeddedImageDataUrl: undefined }));
       }
     };
 
-    const timeoutId = setTimeout(generateEmbeddedImage, 500);
+    const timeoutId = setTimeout(generateEmbeddedImage, 1000);
     return () => clearTimeout(timeoutId);
   }, [tradingData]);
 
@@ -289,7 +291,7 @@ export default function Generator() {
           </div>
           
           {/* Hidden trading screenshot for embedded image generation */}
-          <div style={{ position: 'fixed', left: '-9999px', top: '-9999px', visibility: 'hidden' }}>
+          <div style={{ position: 'absolute', left: '-9999px', top: 0, width: '600px', height: 'auto' }}>
             <TradingScreenshot
               ref={tradingScreenshotRef}
               template={tradingData.template}
