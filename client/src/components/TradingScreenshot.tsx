@@ -242,11 +242,11 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
             <div className="bg-black p-6 font-sans">
               <div className="flex items-center gap-2 mb-6">
                 <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white text-xl font-bold">
-                  {(data.symbol || "META").charAt(0)}
+                  {data.symbol ? data.symbol.charAt(0) : "S"}
                 </div>
                 <div>
-                  <h2 className="text-white text-2xl font-bold">{data.symbol || "META"}</h2>
-                  <p className="text-gray-400 text-sm">{data.accountType || "Meta Platforms Inc."}</p>
+                  <h2 className="text-white text-2xl font-bold">{data.symbol || "STOCK"}</h2>
+                  <p className="text-gray-400 text-sm">{data.accountType || "Company Name"}</p>
                 </div>
               </div>
               <div className="space-y-4 mb-6">
@@ -318,10 +318,10 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
                 <div className="flex items-center gap-3">
                   <div className="text-white">
                     <div className="flex items-center gap-2">
-                      <span className="text-white text-xl font-bold">{data.symbol || "META"}</span>
+                      <span className="text-white text-xl font-bold">{data.symbol || "STOCK"}</span>
                       <span className="bg-pink-600 text-white text-xs px-1.5 py-0.5 rounded">24</span>
                     </div>
-                    <p className="text-gray-400 text-sm">{data.accountType || "META PLATFORMS..."}</p>
+                    <p className="text-gray-400 text-sm">{data.accountType || "COMPANY NAME..."}</p>
                   </div>
                 </div>
                 <div className="text-center">
@@ -340,7 +340,7 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
             <div className="bg-white p-6 font-sans">
               <div className="border-b pb-4 mb-4">
                 <p className="text-gray-500 text-sm mb-2">Your position</p>
-                <h2 className="text-gray-900 text-2xl font-bold mb-4">{data.symbol || "META"} ${data.strikePrice || "1,000"} Call {data.expirationDate || "11/21"}</h2>
+                <h2 className="text-gray-900 text-2xl font-bold mb-4">{data.symbol || "STOCK"} ${data.strikePrice || "1,000"} Call {data.expirationDate || "11/21"}</h2>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-gray-600 mb-1">Contracts</p>
@@ -367,11 +367,11 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
                     <p className="text-gray-900">{data.expirationDate || "11/7"}</p>
                   </div>
                   <div>
-                    <p className="text-gray-600 mb-1">{data.symbol || "META"} breakeven price</p>
+                    <p className="text-gray-600 mb-1">{data.symbol || "STOCK"} breakeven price</p>
                     <p className="text-gray-900">${data.strikePrice || "930.15"}</p>
                   </div>
                   <div>
-                    <p className="text-gray-600 mb-1">Current {data.symbol || "META"} price</p>
+                    <p className="text-gray-600 mb-1">Current {data.symbol || "STOCK"} price</p>
                     <p className="text-gray-900">${data.currentPrice || "952.14"}</p>
                   </div>
                   <div className="col-span-2">
@@ -474,7 +474,7 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
                 <button className="text-gray-900 text-xl mb-4">‹</button>
                 <h2 className="text-gray-900 text-xl font-bold mb-2">Filled order</h2>
                 <h3 className="text-gray-900 text-2xl font-semibold mb-4">
-                  {data.orderType || "Sell"} {data.symbol || "SPXW"} {data.strikePrice || "6765"} Call {data.expirationDate || "11/6"}
+                  {data.orderType || "Sell"} {data.symbol || "STOCK"} {data.strikePrice || "6765"} Call {data.expirationDate || "11/6"}
                 </h3>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
@@ -532,11 +532,11 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
                 </div>
               </div>
               <button className="w-full flex items-center justify-between text-gray-900 py-3 border-b">
-                <span>View {data.symbol || "SPX"} options</span>
+                <span>View {data.symbol || "STOCK"} options</span>
                 <span>›</span>
               </button>
               <button className="w-full flex items-center justify-between text-gray-900 py-3">
-                <span>View {data.symbol || "SPX"}</span>
+                <span>View {data.symbol || "STOCK"}</span>
                 <span>›</span>
               </button>
             </div>
