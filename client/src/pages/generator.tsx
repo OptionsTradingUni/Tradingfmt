@@ -81,12 +81,10 @@ export default function Generator() {
     timePeriod: "Today"
   });
 
-  const tradingScreenshotRef = useRef<HTMLDivElement>(null);
-
   // Generate embedded trading image whenever trading data changes
   useEffect(() => {
     const generateEmbeddedImage = async () => {
-      if (!tradingScreenshotRef.current) return;
+      if (!tradingRef.current) return;
       
       try {
         // Wait for fonts and DOM to be fully ready
@@ -96,15 +94,16 @@ export default function Generator() {
         }
         
         // Get computed background color from the element (works with Tailwind classes)
-        const computedStyle = window.getComputedStyle(tradingScreenshotRef.current);
+        const computedStyle = window.getComputedStyle(tradingRef.current);
         const backgroundColor = computedStyle.backgroundColor || 'transparent';
         
-        const dataUrl = await toPng(tradingScreenshotRef.current, {
+        const dataUrl = await toPng(tradingRef.current, {
           quality: 1,
-          pixelRatio: 4,
+          pixelRatio: 2,
           cacheBust: true,
           skipFonts: false,
           backgroundColor: backgroundColor,
+          width: 432,
         });
         setDiscordData(prev => ({ ...prev, embeddedImageDataUrl: dataUrl }));
       } catch (error) {
@@ -331,41 +330,6 @@ export default function Generator() {
                 )}
               </div>
             </Card>
-          </div>
-          
-          {/* Hidden trading screenshot for embedded image generation */}
-          <div style={{ position: 'absolute', left: '-9999px', top: 0, width: '432px', height: 'auto' }}>
-            <TradingScreenshot
-              ref={tradingScreenshotRef}
-              template={tradingData.template}
-              data={{
-                profit: tradingData.profit,
-                percentage: tradingData.percentage,
-                accountType: tradingData.accountType,
-                totalValue: tradingData.totalValue,
-                sharesOwned: tradingData.sharesOwned,
-                averageCost: tradingData.averageCost,
-                totalGain: tradingData.totalGain,
-                todayGain: tradingData.todayGain,
-                date: tradingData.date,
-                proceeds: tradingData.proceeds,
-                costBasis: tradingData.costBasis,
-                symbol: tradingData.symbol,
-                quantity: tradingData.quantity,
-                currentPrice: tradingData.currentPrice,
-                openPL: tradingData.openPL,
-                dayRPL: tradingData.dayRPL,
-                marketValue: tradingData.marketValue,
-                totalCost: tradingData.totalCost,
-                strikePrice: tradingData.strikePrice,
-                expirationDate: tradingData.expirationDate,
-                contractType: tradingData.contractType,
-                filledPrice: tradingData.filledPrice,
-                filledQuantity: tradingData.filledQuantity,
-                orderType: tradingData.orderType,
-                timePeriod: tradingData.timePeriod,
-              }}
-            />
           </div>
         </div>
       </main>

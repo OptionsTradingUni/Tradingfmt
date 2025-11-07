@@ -65,7 +65,7 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
         case "account-summary":
           return (
             <div className="bg-[#1a1a1a] rounded-xl p-6">
-              <h2 className="text-white text-2xl font-bold mb-6">{data.accountType || "ROTH IRA"}</h2>
+              <h2 className="text-white text-xl font-semibold mb-6">{data.accountType || "Roth IRA"}</h2>
               <div className="space-y-4">
                 <div className="text-[#888888] text-base">Details</div>
                 <div className="flex justify-between items-center py-3 border-b border-[#2a2a2a]">
@@ -532,11 +532,11 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
                 </div>
               </div>
               <button className="w-full flex items-center justify-between text-gray-900 py-3 border-b">
-                <span>View SPX options</span>
+                <span>View {data.symbol || "SPX"} options</span>
                 <span>›</span>
               </button>
               <button className="w-full flex items-center justify-between text-gray-900 py-3">
-                <span>View SPX</span>
+                <span>View {data.symbol || "SPX"}</span>
                 <span>›</span>
               </button>
             </div>
