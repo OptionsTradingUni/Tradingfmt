@@ -163,6 +163,9 @@ export function TradingForm({ data, onChange }: TradingFormProps) {
       const stockData = await response.json();
 
       if (!response.ok) {
+        if (response.status === 404) {
+          throw new Error(`Symbol "${data.symbol.toUpperCase()}" not found. Please check the symbol and try again. Common symbols: AAPL, TSLA, SPY, META, GOOGL`);
+        }
         throw new Error(stockData.error || "Failed to fetch stock data");
       }
 
@@ -204,8 +207,8 @@ export function TradingForm({ data, onChange }: TradingFormProps) {
       });
     } catch (error) {
       toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to fetch stock price",
+        title: "Stock Fetch Failed",
+        description: error instanceof Error ? error.message : "Failed to fetch stock price. Please try again.",
         variant: "destructive",
       });
     } finally {

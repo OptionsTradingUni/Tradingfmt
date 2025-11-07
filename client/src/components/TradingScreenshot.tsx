@@ -52,49 +52,49 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
       switch (template) {
         case "daily-pl":
           return (
-            <div className="bg-white rounded-2xl p-8 shadow-lg max-w-md mx-auto" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
+            <div className="bg-white rounded-2xl p-8 shadow-lg mx-auto" style={{ width: '500px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
               <h1 className="text-[#2F7D5E] font-semibold mb-12 text-center" style={{ fontSize: '36px', letterSpacing: '-0.01em' }}>
                 Daily P&L
               </h1>
               <div className="text-[#2F7D5E] font-bold text-center" style={{ fontSize: '60px', letterSpacing: '-0.03em', lineHeight: '1' }}>
-                {data.profit || "11,415"}
+                ${data.profit || "11,415"}
               </div>
             </div>
           );
 
         case "account-summary":
           return (
-            <div className="bg-[#1a1a1a] rounded-xl p-6">
+            <div className="bg-[#1a1a1a] rounded-xl p-6" style={{ width: '600px' }}>
               <h2 className="text-white text-lg font-semibold mb-6">{data.accountType || "Roth IRA"}</h2>
               <div className="space-y-4">
-                <div className="text-[#888888] text-base">Details</div>
+                <div className="text-[#888888] text-base font-medium">Account Details</div>
                 <div className="flex justify-between items-center py-3 border-b border-[#2a2a2a]">
                   <span className="text-[#cccccc] text-sm">Total value</span>
-                  <span className="text-white text-sm">${data.totalValue || "46,316.19"}</span>
+                  <span className="text-white text-sm font-semibold">${data.totalValue || "46,316.19"}</span>
                 </div>
                 <div className="flex justify-between items-center py-3 border-b border-[#2a2a2a]">
                   <span className="text-[#cccccc] text-sm">Shares owned</span>
-                  <span className="text-white text-sm">{data.sharesOwned || "1,504.261"}</span>
+                  <span className="text-white text-sm font-semibold">{data.sharesOwned || "1,504.261"}</span>
                 </div>
                 <div className="flex justify-between items-center py-3 border-b border-[#2a2a2a]">
                   <span className="text-[#cccccc] text-sm">Average cost</span>
-                  <span className="text-white text-sm">${data.averageCost || "8.19"}</span>
+                  <span className="text-white text-sm font-semibold">${data.averageCost || "8.19"}</span>
                 </div>
                 <div className="flex justify-between items-center py-3 border-b border-[#2a2a2a]">
-                  <span className="text-[#cccccc] text-sm">Total gain/loss</span>
-                  <span className="text-[#22c55e] text-sm">
+                  <span className="text-[#cccccc] text-sm">Total return</span>
+                  <span className="text-[#22c55e] text-sm font-semibold">
                     +${data.totalGain || "34,002.50"} (+{data.percentage || "276.13"}%)
                   </span>
                 </div>
                 <div className="flex justify-between items-center py-3">
-                  <span className="text-[#cccccc] text-sm">Today's gain/loss</span>
-                  <span className="text-[#22c55e] text-sm">
+                  <span className="text-[#cccccc] text-sm">Today's return</span>
+                  <span className="text-[#22c55e] text-sm font-semibold">
                     +${data.todayGain || "1,188.36"} (+2.63%)
                   </span>
                 </div>
               </div>
-              <div className="text-[#666666] text-sm mt-6">
-                As of {data.date || "Oct-28-2025 1:56 p.m. ET"}
+              <div className="text-[#666666] text-xs mt-6">
+                Market data as of {data.date || "Nov-07-2025 2:15 p.m. ET"}
               </div>
             </div>
           );
@@ -239,7 +239,7 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
 
         case "stock-position":
           return (
-            <div className="bg-black p-6 font-sans">
+            <div className="bg-black p-6 font-sans" style={{ width: '600px' }}>
               <div className="flex items-center gap-2 mb-6">
                 <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white text-xl font-bold">
                   {data.symbol ? data.symbol.charAt(0) : "S"}
@@ -251,29 +251,29 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
               </div>
               <div className="space-y-4 mb-6">
                 <div>
-                  <p className="text-gray-400 text-sm">Open P&L(USD)</p>
-                  <p className="text-green-400 text-xl font-bold">+${data.profit || "93,235.48"} +{data.percentage || "8.92"}%</p>
+                  <p className="text-gray-400 text-sm">Open P&L (USD)</p>
+                  <p className="text-green-400 text-2xl font-bold">+${data.profit || "93,235.48"} +{data.percentage || "8.92"}%</p>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-gray-400 text-xs">Market Value</p>
-                    <p className="text-white text-base">${data.marketValue || "1,138,176.52"}</p>
+                    <p className="text-white text-base font-semibold">${data.marketValue || "1,138,176.52"}</p>
                   </div>
                   <div>
                     <p className="text-gray-400 text-xs">Total Cost</p>
-                    <p className="text-white text-base">${data.totalCost || "1,044,941.04"}</p>
+                    <p className="text-white text-base font-semibold">${data.totalCost || "1,044,941.04"}</p>
                   </div>
                   <div>
                     <p className="text-gray-400 text-xs">Quantity</p>
-                    <p className="text-white text-base">{data.quantity || "175,916"}</p>
+                    <p className="text-white text-base font-semibold">{data.quantity || "175,916"}</p>
                   </div>
                   <div>
-                    <p className="text-gray-400 text-xs">Position Ratio ⓘ</p>
-                    <p className="text-white text-base">{data.percentage || "100.00"}%</p>
+                    <p className="text-gray-400 text-xs">Position Ratio</p>
+                    <p className="text-white text-base font-semibold">{data.percentage || "100.00"}%</p>
                   </div>
                   <div>
-                    <p className="text-gray-400 text-xs">Last Price</p>
-                    <p className="text-white text-base">${data.currentPrice || "6.47"}</p>
+                    <p className="text-gray-400 text-xs">Current Price</p>
+                    <p className="text-white text-base font-semibold">${data.currentPrice || "6.47"}</p>
                   </div>
                 </div>
               </div>

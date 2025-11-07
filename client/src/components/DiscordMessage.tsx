@@ -154,7 +154,7 @@ export const DiscordMessage = forwardRef<HTMLDivElement, DiscordMessageProps>(
                 {renderMessage()}
               </div>
               {embeddedImageUrl && (
-                <div className="mt-2 max-w-[432px]">
+                <div className="mt-2 max-w-[600px]">
                   <img 
                     src={embeddedImageUrl} 
                     alt="Embedded" 

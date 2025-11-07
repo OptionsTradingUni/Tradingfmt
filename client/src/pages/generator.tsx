@@ -26,6 +26,38 @@ const MESSAGES = [
 
 const AVATAR_COLORS = ["#5865F2", "#57F287", "#FEE75C", "#EB459E", "#ED4245"];
 
+// Generate realistic trading timestamp within market hours (9:30 AM - 4:00 PM ET)
+const generateTradingTimestamp = () => {
+  const now = new Date();
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  
+  // Random hour between 9 AM and 4 PM (inclusive)
+  const hour = Math.floor(Math.random() * 8) + 9; // 9-16 (9 AM to 4 PM)
+  const minute = Math.floor(Math.random() * 60);
+  
+  // For realistic variance, enforce market hours
+  let finalHour = hour;
+  let finalMinute = minute;
+  
+  // Market opens at 9:30 AM
+  if (hour === 9 && minute < 30) {
+    finalMinute = Math.floor(Math.random() * 30) + 30; // 9:30-9:59
+  }
+  
+  // Market closes at 4:00 PM (no trading after 4:00)
+  if (hour === 16 && minute > 0) {
+    finalMinute = 0; // Exactly 4:00 PM
+  }
+  
+  const period = finalHour >= 12 ? "p.m." : "a.m.";
+  const displayHour = finalHour > 12 ? finalHour - 12 : finalHour === 12 ? 12 : finalHour;
+  const month = months[now.getMonth()];
+  const day = now.getDate();
+  const year = now.getFullYear();
+  
+  return `${month}-${day.toString().padStart(2, '0')}-${year} ${displayHour}:${finalMinute.toString().padStart(2, '0')} ${period} ET`;
+};
+
 export default function Generator() {
   const { toast } = useToast();
   const discordRef = useRef<HTMLDivElement>(null);
@@ -62,7 +94,7 @@ export default function Generator() {
     averageCost: "8.19",
     totalGain: "34,002.50",
     todayGain: "1,188.36",
-    date: "Oct-28-2025 1:56 p.m. ET",
+    date: generateTradingTimestamp(),
     proceeds: "21,055.01",
     costBasis: "14,592.49",
     symbol: "",
@@ -103,7 +135,6 @@ export default function Generator() {
           cacheBust: true,
           skipFonts: false,
           backgroundColor: backgroundColor,
-          width: 432,
         });
         setDiscordData(prev => ({ ...prev, embeddedImageDataUrl: dataUrl }));
       } catch (error) {
@@ -156,6 +187,7 @@ export default function Generator() {
       totalGain: (Math.random() * 50000 + 5000).toFixed(2),
       todayGain: (Math.random() * 10000 + 500).toFixed(2),
       timePeriod: timePeriod,
+      date: generateTradingTimestamp(),
     });
     
     toast({
@@ -174,14 +206,48 @@ export default function Generator() {
         description: "Preparing your screenshot",
       });
       
+      // Get the actual element to capture
+      const element = ref.current;
+      
+      // Wait for all images in the element to fully load and decode
+      const images = element.querySelectorAll('img');
+      const imagePromises = Array.from(images).map(async (img) => {
+        if (img.complete && img.naturalHeight !== 0) {
+          // Image already loaded, ensure it's decoded
+          try {
+            await img.decode();
+          } catch (e) {
+            // Decode failed or not supported, continue anyway
+            console.warn('Image decode failed:', e);
+          }
+        } else {
+          // Wait for image to load
+          await new Promise((resolve, reject) => {
+            img.onload = async () => {
+              try {
+                await img.decode();
+              } catch (e) {
+                console.warn('Image decode failed:', e);
+              }
+              resolve(true);
+            };
+            img.onerror = () => reject(new Error('Image failed to load'));
+            // Trigger load if src is already set
+            if (img.src && !img.complete) {
+              img.src = img.src;
+            }
+          });
+        }
+      });
+      
+      await Promise.all(imagePromises);
+      
       // Wait for fonts and rendering to be ready
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 300));
       if (document.fonts) {
         await document.fonts.ready;
       }
       
-      // Get the actual element to capture
-      const element = ref.current;
       const computedStyle = window.getComputedStyle(element);
       
       // Get background color - handle different element types
