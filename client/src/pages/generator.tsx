@@ -90,18 +90,21 @@ export default function Generator() {
       
       try {
         // Wait for fonts and DOM to be fully ready
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise(resolve => setTimeout(resolve, 300));
         if (document.fonts) {
           await document.fonts.ready;
         }
+        
+        // Get computed background color from the element (works with Tailwind classes)
+        const computedStyle = window.getComputedStyle(tradingScreenshotRef.current);
+        const backgroundColor = computedStyle.backgroundColor || 'transparent';
         
         const dataUrl = await toPng(tradingScreenshotRef.current, {
           quality: 1,
           pixelRatio: 4,
           cacheBust: true,
           skipFonts: false,
-          fontEmbedCSS: '',
-          backgroundColor: tradingScreenshotRef.current.style.backgroundColor || '#000000',
+          backgroundColor: backgroundColor,
         });
         setDiscordData(prev => ({ ...prev, embeddedImageDataUrl: dataUrl }));
       } catch (error) {
@@ -167,17 +170,25 @@ export default function Generator() {
     if (!ref.current) return;
 
     try {
-      // Wait for fonts to be ready
+      // Wait for fonts and rendering to be ready
+      await new Promise(resolve => setTimeout(resolve, 300));
       if (document.fonts) {
         await document.fonts.ready;
       }
+      
+      // Get computed background color from the element
+      const computedStyle = window.getComputedStyle(ref.current);
+      const backgroundColor = computedStyle.backgroundColor || '#ffffff';
       
       const dataUrl = await toPng(ref.current, {
         quality: 1,
         pixelRatio: 3,
         skipFonts: false,
         cacheBust: true,
-        fontEmbedCSS: '',
+        backgroundColor: backgroundColor,
+        style: {
+          transform: 'scale(1)',
+        },
       });
       
       const link = document.createElement('a');
@@ -323,7 +334,7 @@ export default function Generator() {
           </div>
           
           {/* Hidden trading screenshot for embedded image generation */}
-          <div style={{ position: 'absolute', left: '-9999px', top: 0, width: '600px', height: 'auto' }}>
+          <div style={{ position: 'absolute', left: '-9999px', top: 0, width: '432px', height: 'auto' }}>
             <TradingScreenshot
               ref={tradingScreenshotRef}
               template={tradingData.template}

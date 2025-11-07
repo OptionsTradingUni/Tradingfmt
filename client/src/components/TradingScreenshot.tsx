@@ -69,26 +69,26 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
               <div className="space-y-4">
                 <div className="text-[#888888] text-base">Details</div>
                 <div className="flex justify-between items-center py-3 border-b border-[#2a2a2a]">
-                  <span className="text-[#cccccc] text-lg">Total value</span>
-                  <span className="text-white text-lg font-semibold">${data.totalValue || "46,316.19"}</span>
+                  <span className="text-[#cccccc]">Total value</span>
+                  <span className="text-white">${data.totalValue || "46,316.19"}</span>
                 </div>
                 <div className="flex justify-between items-center py-3 border-b border-[#2a2a2a]">
-                  <span className="text-[#cccccc] text-lg">Shares owned</span>
-                  <span className="text-white text-lg font-semibold">{data.sharesOwned || "1,504.261"}</span>
+                  <span className="text-[#cccccc]">Shares owned</span>
+                  <span className="text-white">{data.sharesOwned || "1,504.261"}</span>
                 </div>
                 <div className="flex justify-between items-center py-3 border-b border-[#2a2a2a]">
-                  <span className="text-[#cccccc] text-lg">Average cost</span>
-                  <span className="text-white text-lg font-semibold">${data.averageCost || "8.19"}</span>
+                  <span className="text-[#cccccc]">Average cost</span>
+                  <span className="text-white">${data.averageCost || "8.19"}</span>
                 </div>
                 <div className="flex justify-between items-center py-3 border-b border-[#2a2a2a]">
-                  <span className="text-[#cccccc] text-lg">Total gain/loss</span>
-                  <span className="text-[#22c55e] text-lg font-semibold">
+                  <span className="text-[#cccccc]">Total gain/loss</span>
+                  <span className="text-[#22c55e]">
                     +${data.totalGain || "34,002.50"} (+{data.percentage || "276.13"}%)
                   </span>
                 </div>
                 <div className="flex justify-between items-center py-3">
-                  <span className="text-[#cccccc] text-lg">Today's gain/loss</span>
-                  <span className="text-[#22c55e] text-lg font-semibold">
+                  <span className="text-[#cccccc]">Today's gain/loss</span>
+                  <span className="text-[#22c55e]">
                     +${data.todayGain || "1,188.36"} (+2.63%)
                   </span>
                 </div>
@@ -153,7 +153,7 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
             <div className="bg-black p-6" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
               <div className="flex items-center gap-2 mb-4">
                 <button className="text-white text-lg">←</button>
-                <h2 className="text-white text-lg font-semibold" style={{ letterSpacing: '-0.01em' }}>Realized P&L</h2>
+                <h2 className="text-white text-lg" style={{ letterSpacing: '-0.01em' }}>Realized P&L</h2>
               </div>
               <div className="mb-2">
                 <div className="text-gray-400 text-xs mb-1" style={{ letterSpacing: '0.01em' }}>{data.date || "Oct-28-2025 1:56 p.m. ET"} Realized P&L ↑</div>
@@ -188,7 +188,7 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
               <div className="text-white font-bold mb-4" style={{ fontSize: '56px', letterSpacing: '-0.03em', lineHeight: '1' }}>
                 ${data.totalValue || "51,231.80"}
               </div>
-              <div className="flex items-center gap-2 text-green-500 font-semibold" style={{ fontSize: '28px', letterSpacing: '-0.01em' }}>
+              <div className="flex items-center gap-2 text-green-500" style={{ fontSize: '28px', letterSpacing: '-0.01em' }}>
                 <span>▲</span>
                 <span>${data.todayGain || "30,697.16"} ({data.percentage || "149.49"}%)</span>
                 <span className="text-gray-400 ml-2" style={{ fontSize: '24px' }}>{data.timePeriod || "Today"}</span>
@@ -201,7 +201,7 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
             <div className="bg-white p-6 font-sans">
               <div className="flex items-center justify-between mb-4">
                 <button className="text-gray-900 text-2xl">←</button>
-                <h2 className="text-gray-900 text-xl font-semibold">Realized profit & loss</h2>
+                <h2 className="text-gray-900 text-xl">Realized profit & loss</h2>
                 <button className="text-gray-500 text-2xl">ⓘ</button>
               </div>
               <div className="text-center mb-6">
@@ -219,7 +219,7 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
                 <div className="text-gray-900 text-4xl font-bold mb-2">
                   +${data.profit || "58,032.91"}
                 </div>
-                <div className="flex items-center gap-2 text-green-600 text-lg">
+                <div className="flex items-center gap-2 text-green-600">
                   <span>▲ {data.percentage || "17.72"}%</span>
                   <span className="text-gray-500">{data.timePeriod || "Year to date"}</span>
                 </div>
@@ -251,7 +251,7 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
               </div>
               <div className="space-y-4 mb-6">
                 <div>
-                  <p className="text-gray-400 text-sm">Open P&L(USD)</p>
+                  <p className="text-gray-400">Open P&L(USD)</p>
                   <p className="text-green-400 text-2xl font-bold">+{data.profit || "93,235.48"} +{data.percentage || "8.92"}%</p>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
@@ -289,7 +289,7 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
                 <div className="relative h-2 bg-gradient-to-r from-green-600 via-yellow-500 to-red-600 rounded"></div>
               </div>
               <div className="mt-6">
-                <h3 className="text-white font-semibold mb-3">Filled Records</h3>
+                <h3 className="text-white mb-3">Filled Records</h3>
                 <p className="text-gray-400 text-sm mb-2">Display only transaction records from the last 3 years.</p>
                 <div className="border-t border-gray-800 pt-3">
                   <div className="flex justify-between items-center">
@@ -325,11 +325,11 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
                   </div>
                 </div>
                 <div className="text-center">
-                  <p className="text-white text-xl font-semibold">{data.currentPrice || "657.97"}</p>
+                  <p className="text-white text-xl">{data.currentPrice || "657.97"}</p>
                 </div>
                 <div className="text-right">
                   <p className="text-white text-xl">${data.openPL || "0.00"}</p>
-                  <p className="text-green-500 text-lg font-semibold">${data.dayRPL || "2,801.00"}</p>
+                  <p className="text-green-500 text-lg">${data.dayRPL || "2,801.00"}</p>
                 </div>
               </div>
             </div>
@@ -344,19 +344,19 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-gray-600 mb-1">Contracts</p>
-                    <p className="text-gray-900 text-xl font-semibold">{data.quantity || "+40"}</p>
+                    <p className="text-gray-900 text-xl">{data.quantity || "+40"}</p>
                   </div>
                   <div>
                     <p className="text-gray-600 mb-1">Current price</p>
-                    <p className="text-gray-900 text-xl font-semibold">${data.currentPrice || "37.68"}</p>
+                    <p className="text-gray-900 text-xl">${data.currentPrice || "37.68"}</p>
                   </div>
                   <div>
                     <p className="text-gray-600 mb-1">Average cost</p>
-                    <p className="text-gray-900 text-xl font-semibold">${data.averageCost || "10.11"}</p>
+                    <p className="text-gray-900 text-xl">${data.averageCost || "10.11"}</p>
                   </div>
                   <div>
                     <p className="text-gray-600 mb-1">Market value</p>
-                    <p className="text-gray-900 text-xl font-semibold">${data.marketValue || "150,720.00"}</p>
+                    <p className="text-gray-900 text-xl">${data.marketValue || "150,720.00"}</p>
                   </div>
                   <div>
                     <p className="text-gray-600 mb-1">Date bought</p>
@@ -399,11 +399,11 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
             <div className="bg-white p-6 font-sans">
               <div className="flex justify-between items-center">
                 <div>
-                  <p className="text-gray-600 text-lg mb-1">Open PL</p>
+                  <p className="text-gray-600 mb-1">Open PL</p>
                   <p className="text-gray-900 text-3xl font-bold">${data.openPL || "0.00"}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-gray-600 text-lg mb-1">Day RPL</p>
+                  <p className="text-gray-600 mb-1">Day RPL</p>
                   <p className="text-green-600 text-3xl font-bold">${data.dayRPL || "903.00"}</p>
                 </div>
               </div>
@@ -416,7 +416,7 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
               <div className="border-b border-gray-800 pb-4 mb-4">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex gap-4">
-                    <button className="text-white font-semibold border-b-2 border-white pb-2">{data.accountType || "Bob"}</button>
+                    <button className="text-white border-b-2 border-white pb-2">{data.accountType || "Bob"}</button>
                     <button className="text-gray-500 pb-2">Roth IRA</button>
                     <button className="text-gray-500 pb-2">Joint</button>
                     <button className="text-gray-500 pb-2">Strategies</button>
@@ -427,7 +427,7 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
                   <div className="text-white text-5xl font-bold mb-2">
                     ${data.totalValue || "8,001.98"}
                   </div>
-                  <div className="flex items-center gap-2 text-green-500 text-xl">
+                  <div className="flex items-center gap-2 text-green-500">
                     <span>▲ ${data.todayGain || "8,383.47"} ({data.percentage || "46,523.13"}%) Today</span>
                   </div>
                 </div>

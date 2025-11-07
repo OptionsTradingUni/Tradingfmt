@@ -158,7 +158,8 @@ export const DiscordMessage = forwardRef<HTMLDivElement, DiscordMessageProps>(
                   <img 
                     src={embeddedImageUrl} 
                     alt="Embedded" 
-                    className="rounded-md w-full"
+                    className="rounded-md w-full h-auto"
+                    style={{ objectFit: 'contain' }}
                   />
                 </div>
               )}
