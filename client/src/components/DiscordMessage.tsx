@@ -142,13 +142,13 @@ export const DiscordMessage = forwardRef<HTMLDivElement, DiscordMessageProps>(
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                <span className="font-semibold text-[15px]" style={{ color: theme.text }}>{username}</span>
+                <span className="font-semibold text-[15px] whitespace-nowrap" style={{ color: theme.text }}>{username}</span>
                 {verified && (
-                  <svg className="w-4 h-4 text-[#5865F2]" viewBox="0 0 16 16" fill="currentColor">
+                  <svg className="w-4 h-4 text-[#5865F2] flex-shrink-0" viewBox="0 0 16 16" fill="currentColor">
                     <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.97 5.53-5 5a.75.75 0 0 1-1.06 0l-2-2a.75.75 0 1 1 1.06-1.06L6.5 8.94l4.47-4.47a.75.75 0 0 1 1.06 1.06z" />
                   </svg>
                 )}
-                <span className="text-xs" style={{ color: theme.textSecondary }}>{timestamp}</span>
+                <span className="text-xs whitespace-nowrap" style={{ color: theme.textSecondary }}>{timestamp}</span>
               </div>
               <div className="text-[15px] leading-[1.375] mb-2" style={{ color: "#DBDEE1" }}>
                 {renderMessage()}

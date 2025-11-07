@@ -92,6 +92,8 @@ export default function Generator() {
           quality: 1,
           pixelRatio: 2,
           cacheBust: true,
+          skipFonts: false,
+          preferredFontFormat: 'woff2',
         });
         setDiscordData(prev => ({ ...prev, embeddedImageDataUrl: dataUrl }));
       } catch (error) {
@@ -156,8 +158,9 @@ export default function Generator() {
       const dataUrl = await toPng(ref.current, {
         quality: 1,
         pixelRatio: 2,
-        skipFonts: true,
+        skipFonts: false,
         cacheBust: true,
+        preferredFontFormat: 'woff2',
       });
       
       const link = document.createElement('a');
