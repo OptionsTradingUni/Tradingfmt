@@ -33,7 +33,6 @@ export interface TradingFormData {
   filledPrice: string;
   filledQuantity: string;
   orderType: string;
-  afterHoursChange: string;
 }
 
 interface TradingFormProps {
@@ -156,7 +155,7 @@ export function TradingForm({ data, onChange }: TradingFormProps) {
       case "day-pl-simple":
         return ["openPL", "dayRPL"];
       case "brokerage-account":
-        return ["accountType", "totalValue", "todayGain", "percentage", "afterHoursChange"];
+        return ["accountType", "totalValue", "todayGain", "percentage"];
       case "filled-order":
         return ["orderType", "symbol", "strikePrice", "expirationDate", "contractType", "date", "quantity", "filledQuantity", "filledPrice", "proceeds", "costBasis", "profit"];
       default:
@@ -511,18 +510,6 @@ export function TradingForm({ data, onChange }: TradingFormProps) {
         </div>
       )}
 
-      {relevantFields.includes("afterHoursChange") && (
-        <div className="space-y-2">
-          <Label htmlFor="afterHoursChange" data-testid="label-after-hours-change">After-Hours Change</Label>
-          <Input
-            id="afterHoursChange"
-            data-testid="input-after-hours-change"
-            value={data.afterHoursChange}
-            onChange={(e) => updateField('afterHoursChange', e.target.value)}
-            placeholder="e.g., 399.51"
-          />
-        </div>
-      )}
     </div>
   );
 }

@@ -13,6 +13,13 @@ const AVATAR_COLORS = [
   { name: "Red", value: "#ED4245" },
 ];
 
+const DISCORD_THEMES = [
+  { name: "Default Dark", value: "dark", bg: "#313338", lighter: "#2B2D31" },
+  { name: "Midnight", value: "#1E1F22", bg: "#1E1F22", lighter: "#232428" },
+  { name: "Darker", value: "#0A0A0A", bg: "#0A0A0A", lighter: "#111111" },
+];
+
+
 const EMOJI_PRESETS = ["💰", "🔥", "😊", "👍", "🚀", "💪", "🎯", "⭐"];
 
 const MESSAGE_TEMPLATES = [
@@ -38,6 +45,7 @@ export interface DiscordFormData {
   showNotificationBadge: boolean;
   typingUsers: string[];
   showTypingIndicator: boolean;
+  backgroundTheme: string;
 }
 
 interface DiscordFormProps {
@@ -124,6 +132,28 @@ export function DiscordForm({ data, onChange }: DiscordFormProps) {
                     style={{ backgroundColor: color.value }}
                   />
                   {color.name}
+                </div>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="space-y-2">
+        <Label data-testid="label-background-theme">Background Theme</Label>
+        <Select value={data.backgroundTheme} onValueChange={(value) => updateField('backgroundTheme', value)}>
+          <SelectTrigger data-testid="select-background-theme">
+            <SelectValue placeholder="Select theme" />
+          </SelectTrigger>
+          <SelectContent>
+            {DISCORD_THEMES.map((theme) => (
+              <SelectItem key={theme.value} value={theme.value}>
+                <div className="flex items-center gap-2">
+                  <div 
+                    className="w-4 h-4 rounded" 
+                    style={{ backgroundColor: theme.bg }}
+                  />
+                  {theme.name}
                 </div>
               </SelectItem>
             ))}

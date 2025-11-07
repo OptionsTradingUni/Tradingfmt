@@ -48,7 +48,8 @@ export default function Generator() {
     notificationCount: "99",
     showNotificationBadge: true,
     typingUsers: ["Boog"],
-    showTypingIndicator: true
+    showTypingIndicator: true,
+    backgroundTheme: "dark"
   });
 
   const [tradingData, setTradingData] = useState<TradingFormData>({
@@ -76,8 +77,7 @@ export default function Generator() {
     contractType: "Limit sell",
     filledPrice: "1.85",
     filledQuantity: "3 contracts at $1.85",
-    orderType: "Sell",
-    afterHoursChange: "399.51"
+    orderType: "Sell"
   });
 
   const tradingScreenshotRef = useRef<HTMLDivElement>(null);
@@ -91,6 +91,8 @@ export default function Generator() {
         const dataUrl = await toPng(tradingScreenshotRef.current, {
           quality: 1,
           pixelRatio: 2,
+          skipFonts: true,
+          cacheBust: true,
         });
         setDiscordData(prev => ({ ...prev, embeddedImageDataUrl: dataUrl }));
       } catch (error) {
@@ -155,6 +157,8 @@ export default function Generator() {
       const dataUrl = await toPng(ref.current, {
         quality: 1,
         pixelRatio: 2,
+        skipFonts: true,
+        cacheBust: true,
       });
       
       const link = document.createElement('a');
@@ -243,6 +247,7 @@ export default function Generator() {
                   showNotificationBadge={discordData.showNotificationBadge}
                   typingUsers={discordData.typingUsers}
                   showTypingIndicator={discordData.showTypingIndicator}
+                  backgroundTheme={discordData.backgroundTheme}
                 />
               ) : (
                 <TradingScreenshot
@@ -273,7 +278,6 @@ export default function Generator() {
                     filledPrice: tradingData.filledPrice,
                     filledQuantity: tradingData.filledQuantity,
                     orderType: tradingData.orderType,
-                    afterHoursChange: tradingData.afterHoursChange,
                   }}
                 />
               )}
@@ -310,7 +314,6 @@ export default function Generator() {
                 filledPrice: tradingData.filledPrice,
                 filledQuantity: tradingData.filledQuantity,
                 orderType: tradingData.orderType,
-                afterHoursChange: tradingData.afterHoursChange,
               }}
             />
           </div>

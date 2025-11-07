@@ -42,7 +42,6 @@ export interface TradingScreenshotProps {
     filledPrice?: string;
     filledQuantity?: string;
     orderType?: string;
-    afterHoursChange?: string;
   };
 }
 
@@ -433,11 +432,8 @@ export const TradingScreenshot = forwardRef<HTMLDivElement, TradingScreenshotPro
                   <div className="text-white text-5xl font-bold mb-2">
                     ${data.totalValue || "8,001.98"}
                   </div>
-                  <div className="flex items-center gap-2 text-green-500 text-xl mb-1">
+                  <div className="flex items-center gap-2 text-green-500 text-xl">
                     <span>▲ ${data.todayGain || "8,383.47"} ({data.percentage || "46,523.13"}%) Today</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-red-500 text-base">
-                    <span>▼ ${data.afterHoursChange || "399.51"} ({data.percentage || "4.76"}%) After-hours</span>
                   </div>
                 </div>
                 <button className="bg-yellow-200 text-black px-6 py-2 rounded-full font-semibold">
