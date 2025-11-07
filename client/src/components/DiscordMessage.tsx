@@ -9,6 +9,10 @@ export interface DiscordMessageProps {
   verified?: boolean;
   channelName?: string;
   embeddedImageUrl?: string;
+  notificationCount?: string;
+  showNotificationBadge?: boolean;
+  typingUsers?: string[];
+  showTypingIndicator?: boolean;
 }
 
 const DEFAULT_COLORS = [
@@ -20,7 +24,20 @@ const DEFAULT_COLORS = [
 ];
 
 export const DiscordMessage = forwardRef<HTMLDivElement, DiscordMessageProps>(
-  ({ username, avatarColor, message, timestamp, reactions = [], verified = false, channelName = "profits", embeddedImageUrl }, ref) => {
+  ({ 
+    username, 
+    avatarColor, 
+    message, 
+    timestamp, 
+    reactions = [], 
+    verified = false, 
+    channelName = "profits", 
+    embeddedImageUrl,
+    notificationCount = "99",
+    showNotificationBadge = true,
+    typingUsers = ["Boog"],
+    showTypingIndicator = true
+  }, ref) => {
     const getAvatarColor = () => {
       if (avatarColor) return avatarColor;
       return DEFAULT_COLORS[username.length % DEFAULT_COLORS.length];
@@ -47,6 +64,14 @@ export const DiscordMessage = forwardRef<HTMLDivElement, DiscordMessageProps>(
       });
     };
 
+    const getTypingText = () => {
+      if (typingUsers.length === 0) return "Someone is typing...";
+      if (typingUsers.length === 1) return `${typingUsers[0]} is typing...`;
+      if (typingUsers.length === 2) return `${typingUsers[0]} and ${typingUsers[1]} are typing...`;
+      if (typingUsers.length === 3) return `${typingUsers[0]}, ${typingUsers[1]}, and ${typingUsers[2]} are typing...`;
+      return `${typingUsers[0]}, ${typingUsers[1]}, and ${typingUsers.length - 2} others are typing...`;
+    };
+
     return (
       <div ref={ref} className="bg-[#313338] w-[669px] font-sans overflow-hidden">
         {/* Discord Header */}
@@ -61,9 +86,11 @@ export const DiscordMessage = forwardRef<HTMLDivElement, DiscordMessageProps>(
               </svg>
               <span className="text-white font-semibold text-[16px]">{channelName}</span>
             </div>
-            <div className="bg-[#F23F42] text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
-              99
-            </div>
+            {showNotificationBadge && (
+              <div className="bg-[#F23F42] text-white text-xs font-bold rounded-full min-w-[24px] h-6 px-1.5 flex items-center justify-center">
+                {notificationCount}
+              </div>
+            )}
           </div>
           <svg className="w-5 h-5 text-[#B5BAC1]" viewBox="0 0 24 24" fill="currentColor">
             <path d="M21.707 20.293l-6.388-6.388A7.455 7.455 0 0016 10a7.5 7.5 0 10-7.5 7.5 7.455 7.455 0 003.905-.681l6.388 6.388a1 1 0 001.414-1.414zM4 10a6 6 0 116 6 6.007 6.007 0 01-6-6z"/>
@@ -119,16 +146,18 @@ export const DiscordMessage = forwardRef<HTMLDivElement, DiscordMessageProps>(
         </div>
 
         {/* Bottom bar (typing indicator) */}
-        <div className="px-4 py-3 border-t border-[#26282C]">
-          <div className="flex items-center gap-2 text-[#949BA4] text-sm">
-            <div className="flex gap-1">
-              <div className="w-1.5 h-1.5 bg-[#949BA4] rounded-full"></div>
-              <div className="w-1.5 h-1.5 bg-[#949BA4] rounded-full"></div>
-              <div className="w-1.5 h-1.5 bg-[#949BA4] rounded-full"></div>
+        {showTypingIndicator && (
+          <div className="px-4 py-3 border-t border-[#26282C]">
+            <div className="flex items-center gap-2 text-[#949BA4] text-sm">
+              <div className="flex gap-1">
+                <div className="w-1.5 h-1.5 bg-[#949BA4] rounded-full"></div>
+                <div className="w-1.5 h-1.5 bg-[#949BA4] rounded-full"></div>
+                <div className="w-1.5 h-1.5 bg-[#949BA4] rounded-full"></div>
+              </div>
+              <span>{getTypingText()}</span>
             </div>
-            <span>Boog is typing...</span>
           </div>
-        </div>
+        )}
       </div>
     );
   }

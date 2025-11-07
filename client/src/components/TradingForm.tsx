@@ -1,6 +1,10 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { RefreshCw } from "lucide-react";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 import type { TemplateType } from "./TradingScreenshot";
 
 export interface TradingFormData {
@@ -16,6 +20,20 @@ export interface TradingFormData {
   date: string;
   proceeds: string;
   costBasis: string;
+  symbol: string;
+  quantity: string;
+  currentPrice: string;
+  openPL: string;
+  dayRPL: string;
+  marketValue: string;
+  totalCost: string;
+  strikePrice: string;
+  expirationDate: string;
+  contractType: string;
+  filledPrice: string;
+  filledQuantity: string;
+  orderType: string;
+  afterHoursChange: string;
 }
 
 interface TradingFormProps {
@@ -29,11 +47,88 @@ const TEMPLATE_OPTIONS = [
   { value: "gain-loss", label: "Gain/Loss Report" },
   { value: "realized-pl", label: "Realized P&L" },
   { value: "position-details", label: "Position Details" },
+  { value: "portfolio-value", label: "Portfolio Value" },
+  { value: "profit-chart", label: "Profit Chart" },
+  { value: "stock-position", label: "Stock Position" },
+  { value: "watchlist-item", label: "Watchlist Item" },
+  { value: "options-position", label: "Options Position" },
+  { value: "day-pl-simple", label: "Day P&L Simple" },
+  { value: "brokerage-account", label: "Brokerage Account" },
+  { value: "filled-order", label: "Filled Order" },
 ];
 
 export function TradingForm({ data, onChange }: TradingFormProps) {
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+
   const updateField = (field: keyof TradingFormData, value: string) => {
     onChange({ ...data, [field]: value });
+  };
+
+  const fetchStockPrice = async () => {
+    if (!data.symbol) {
+      toast({
+        title: "Missing Symbol",
+        description: "Please enter a stock symbol first",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await fetch(`/api/stock/${data.symbol}`);
+      const stockData = await response.json();
+
+      if (!response.ok) {
+        throw new Error(stockData.error || "Failed to fetch stock data");
+      }
+
+      const price = parseFloat(stockData.currentPrice);
+      const absPercentage = Math.abs(parseFloat(stockData.changePercent));
+      
+      // Calculate market value and total cost if quantity is provided
+      let marketValue = data.marketValue;
+      let totalCost = data.totalCost;
+      let averageCost = data.averageCost;
+      
+      if (data.quantity && data.quantity !== "") {
+        const qty = parseFloat(data.quantity.replace(/,/g, ""));
+        if (!isNaN(qty)) {
+          marketValue = (price * qty).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+          
+          // If average cost is provided, calculate total cost
+          if (data.averageCost && data.averageCost !== "") {
+            const avgCost = parseFloat(data.averageCost.replace(/,/g, ""));
+            if (!isNaN(avgCost)) {
+              totalCost = (avgCost * qty).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            }
+          }
+        }
+      }
+
+      // Auto-fill current price and calculated values
+      onChange({
+        ...data,
+        currentPrice: stockData.currentPrice,
+        percentage: absPercentage.toFixed(2),
+        marketValue,
+        totalCost,
+      });
+
+      toast({
+        title: "Price Updated!",
+        description: `${stockData.symbol}: $${stockData.currentPrice} (${stockData.changePercent > 0 ? '+' : ''}${stockData.changePercent}%)`,
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to fetch stock price",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const getRelevantFields = () => {
@@ -48,6 +143,22 @@ export function TradingForm({ data, onChange }: TradingFormProps) {
         return ["profit", "date"];
       case "position-details":
         return ["profit", "accountType"];
+      case "portfolio-value":
+        return ["totalValue", "todayGain", "percentage"];
+      case "profit-chart":
+        return ["profit", "percentage"];
+      case "stock-position":
+        return ["symbol", "accountType", "profit", "percentage", "marketValue", "totalCost", "quantity", "currentPrice", "averageCost", "date"];
+      case "watchlist-item":
+        return ["symbol", "accountType", "currentPrice", "openPL", "dayRPL"];
+      case "options-position":
+        return ["symbol", "strikePrice", "expirationDate", "quantity", "currentPrice", "averageCost", "marketValue", "date", "todayGain", "profit", "percentage"];
+      case "day-pl-simple":
+        return ["openPL", "dayRPL"];
+      case "brokerage-account":
+        return ["accountType", "totalValue", "todayGain", "percentage", "afterHoursChange"];
+      case "filled-order":
+        return ["orderType", "symbol", "strikePrice", "expirationDate", "contractType", "date", "quantity", "filledQuantity", "filledPrice", "proceeds", "costBasis", "profit"];
       default:
         return [];
     }
@@ -215,6 +326,200 @@ export function TradingForm({ data, onChange }: TradingFormProps) {
             value={data.costBasis}
             onChange={(e) => updateField('costBasis', e.target.value)}
             placeholder="e.g., 14,592.49"
+          />
+        </div>
+      )}
+
+      {relevantFields.includes("symbol") && (
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="symbol" data-testid="label-symbol">Stock Symbol</Label>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={fetchStockPrice}
+              disabled={isLoading}
+              data-testid="button-fetch-price"
+            >
+              <RefreshCw className={`w-3 h-3 mr-1 ${isLoading ? 'animate-spin' : ''}`} />
+              Fetch Price
+            </Button>
+          </div>
+          <Input
+            id="symbol"
+            data-testid="input-symbol"
+            value={data.symbol}
+            onChange={(e) => updateField('symbol', e.target.value)}
+            placeholder="e.g., META, AAPL, SPY"
+          />
+        </div>
+      )}
+
+      {relevantFields.includes("quantity") && (
+        <div className="space-y-2">
+          <Label htmlFor="quantity" data-testid="label-quantity">Quantity/Contracts</Label>
+          <Input
+            id="quantity"
+            data-testid="input-quantity"
+            value={data.quantity}
+            onChange={(e) => updateField('quantity', e.target.value)}
+            placeholder="e.g., 175,916 or 40"
+          />
+        </div>
+      )}
+
+      {relevantFields.includes("currentPrice") && (
+        <div className="space-y-2">
+          <Label htmlFor="currentPrice" data-testid="label-current-price">Current Price</Label>
+          <Input
+            id="currentPrice"
+            data-testid="input-current-price"
+            value={data.currentPrice}
+            onChange={(e) => updateField('currentPrice', e.target.value)}
+            placeholder="e.g., 657.97"
+          />
+        </div>
+      )}
+
+      {relevantFields.includes("openPL") && (
+        <div className="space-y-2">
+          <Label htmlFor="openPL" data-testid="label-open-pl">Open P&L</Label>
+          <Input
+            id="openPL"
+            data-testid="input-open-pl"
+            value={data.openPL}
+            onChange={(e) => updateField('openPL', e.target.value)}
+            placeholder="e.g., 0.00"
+          />
+        </div>
+      )}
+
+      {relevantFields.includes("dayRPL") && (
+        <div className="space-y-2">
+          <Label htmlFor="dayRPL" data-testid="label-day-rpl">Day Realized P&L</Label>
+          <Input
+            id="dayRPL"
+            data-testid="input-day-rpl"
+            value={data.dayRPL}
+            onChange={(e) => updateField('dayRPL', e.target.value)}
+            placeholder="e.g., 903.00"
+          />
+        </div>
+      )}
+
+      {relevantFields.includes("marketValue") && (
+        <div className="space-y-2">
+          <Label htmlFor="marketValue" data-testid="label-market-value">Market Value</Label>
+          <Input
+            id="marketValue"
+            data-testid="input-market-value"
+            value={data.marketValue}
+            onChange={(e) => updateField('marketValue', e.target.value)}
+            placeholder="e.g., 1,138,176.52"
+          />
+        </div>
+      )}
+
+      {relevantFields.includes("totalCost") && (
+        <div className="space-y-2">
+          <Label htmlFor="totalCost" data-testid="label-total-cost">Total Cost</Label>
+          <Input
+            id="totalCost"
+            data-testid="input-total-cost"
+            value={data.totalCost}
+            onChange={(e) => updateField('totalCost', e.target.value)}
+            placeholder="e.g., 1,044,941.04"
+          />
+        </div>
+      )}
+
+      {relevantFields.includes("strikePrice") && (
+        <div className="space-y-2">
+          <Label htmlFor="strikePrice" data-testid="label-strike-price">Strike Price</Label>
+          <Input
+            id="strikePrice"
+            data-testid="input-strike-price"
+            value={data.strikePrice}
+            onChange={(e) => updateField('strikePrice', e.target.value)}
+            placeholder="e.g., 1,000"
+          />
+        </div>
+      )}
+
+      {relevantFields.includes("expirationDate") && (
+        <div className="space-y-2">
+          <Label htmlFor="expirationDate" data-testid="label-expiration-date">Expiration Date</Label>
+          <Input
+            id="expirationDate"
+            data-testid="input-expiration-date"
+            value={data.expirationDate}
+            onChange={(e) => updateField('expirationDate', e.target.value)}
+            placeholder="e.g., 11/21"
+          />
+        </div>
+      )}
+
+      {relevantFields.includes("contractType") && (
+        <div className="space-y-2">
+          <Label htmlFor="contractType" data-testid="label-contract-type">Contract/Order Type</Label>
+          <Input
+            id="contractType"
+            data-testid="input-contract-type"
+            value={data.contractType}
+            onChange={(e) => updateField('contractType', e.target.value)}
+            placeholder="e.g., Limit sell"
+          />
+        </div>
+      )}
+
+      {relevantFields.includes("filledPrice") && (
+        <div className="space-y-2">
+          <Label htmlFor="filledPrice" data-testid="label-filled-price">Filled Price</Label>
+          <Input
+            id="filledPrice"
+            data-testid="input-filled-price"
+            value={data.filledPrice}
+            onChange={(e) => updateField('filledPrice', e.target.value)}
+            placeholder="e.g., 1.85"
+          />
+        </div>
+      )}
+
+      {relevantFields.includes("filledQuantity") && (
+        <div className="space-y-2">
+          <Label htmlFor="filledQuantity" data-testid="label-filled-quantity">Filled Quantity</Label>
+          <Input
+            id="filledQuantity"
+            data-testid="input-filled-quantity"
+            value={data.filledQuantity}
+            onChange={(e) => updateField('filledQuantity', e.target.value)}
+            placeholder="e.g., 3 contracts at $1.85"
+          />
+        </div>
+      )}
+
+      {relevantFields.includes("orderType") && (
+        <div className="space-y-2">
+          <Label htmlFor="orderType" data-testid="label-order-type">Order Type</Label>
+          <Input
+            id="orderType"
+            data-testid="input-order-type"
+            value={data.orderType}
+            onChange={(e) => updateField('orderType', e.target.value)}
+            placeholder="e.g., Sell, Buy"
+          />
+        </div>
+      )}
+
+      {relevantFields.includes("afterHoursChange") && (
+        <div className="space-y-2">
+          <Label htmlFor="afterHoursChange" data-testid="label-after-hours-change">After-Hours Change</Label>
+          <Input
+            id="afterHoursChange"
+            data-testid="input-after-hours-change"
+            value={data.afterHoursChange}
+            onChange={(e) => updateField('afterHoursChange', e.target.value)}
+            placeholder="e.g., 399.51"
           />
         </div>
       )}

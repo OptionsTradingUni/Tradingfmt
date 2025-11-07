@@ -44,7 +44,11 @@ export default function Generator() {
       { emoji: "🔥", count: 2 }
     ],
     verified: true,
-    embeddedImageDataUrl: undefined
+    embeddedImageDataUrl: undefined,
+    notificationCount: "99",
+    showNotificationBadge: true,
+    typingUsers: ["Boog"],
+    showTypingIndicator: true
   });
 
   const [tradingData, setTradingData] = useState<TradingFormData>({
@@ -59,7 +63,21 @@ export default function Generator() {
     todayGain: "1,188.36",
     date: "Oct-28-2025 1:56 p.m. ET",
     proceeds: "21,055.01",
-    costBasis: "14,592.49"
+    costBasis: "14,592.49",
+    symbol: "META",
+    quantity: "175,916",
+    currentPrice: "657.97",
+    openPL: "0.00",
+    dayRPL: "903.00",
+    marketValue: "1,138,176.52",
+    totalCost: "1,044,941.04",
+    strikePrice: "1,000",
+    expirationDate: "11/21",
+    contractType: "Limit sell",
+    filledPrice: "1.85",
+    filledQuantity: "3 contracts at $1.85",
+    orderType: "Sell",
+    afterHoursChange: "399.51"
   });
 
   const tradingScreenshotRef = useRef<HTMLDivElement>(null);
@@ -221,6 +239,10 @@ export default function Generator() {
                   reactions={discordData.reactions}
                   verified={discordData.verified}
                   embeddedImageUrl={discordData.embeddedImageDataUrl}
+                  notificationCount={discordData.notificationCount}
+                  showNotificationBadge={discordData.showNotificationBadge}
+                  typingUsers={discordData.typingUsers}
+                  showTypingIndicator={discordData.showTypingIndicator}
                 />
               ) : (
                 <TradingScreenshot
@@ -238,6 +260,20 @@ export default function Generator() {
                     date: tradingData.date,
                     proceeds: tradingData.proceeds,
                     costBasis: tradingData.costBasis,
+                    symbol: tradingData.symbol,
+                    quantity: tradingData.quantity,
+                    currentPrice: tradingData.currentPrice,
+                    openPL: tradingData.openPL,
+                    dayRPL: tradingData.dayRPL,
+                    marketValue: tradingData.marketValue,
+                    totalCost: tradingData.totalCost,
+                    strikePrice: tradingData.strikePrice,
+                    expirationDate: tradingData.expirationDate,
+                    contractType: tradingData.contractType,
+                    filledPrice: tradingData.filledPrice,
+                    filledQuantity: tradingData.filledQuantity,
+                    orderType: tradingData.orderType,
+                    afterHoursChange: tradingData.afterHoursChange,
                   }}
                 />
               )}
@@ -261,6 +297,20 @@ export default function Generator() {
                 date: tradingData.date,
                 proceeds: tradingData.proceeds,
                 costBasis: tradingData.costBasis,
+                symbol: tradingData.symbol,
+                quantity: tradingData.quantity,
+                currentPrice: tradingData.currentPrice,
+                openPL: tradingData.openPL,
+                dayRPL: tradingData.dayRPL,
+                marketValue: tradingData.marketValue,
+                totalCost: tradingData.totalCost,
+                strikePrice: tradingData.strikePrice,
+                expirationDate: tradingData.expirationDate,
+                contractType: tradingData.contractType,
+                filledPrice: tradingData.filledPrice,
+                filledQuantity: tradingData.filledQuantity,
+                orderType: tradingData.orderType,
+                afterHoursChange: tradingData.afterHoursChange,
               }}
             />
           </div>

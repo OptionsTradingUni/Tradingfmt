@@ -15,6 +15,16 @@ const AVATAR_COLORS = [
 
 const EMOJI_PRESETS = ["💰", "🔥", "😊", "👍", "🚀", "💪", "🎯", "⭐"];
 
+const MESSAGE_TEMPLATES = [
+  { name: "Entry Signal - Calls", value: "Bought {symbol} ${strikePrice} Calls {expiration}\nEntry: ${entryPrice}\n{quantity} contracts\nLet's see how this plays out" },
+  { name: "Entry Signal - Stock", value: "Just opened a position in {symbol}\nEntry: ${price}\nQuantity: {shares} shares\nTarget: ${target}" },
+  { name: "Exit Signal - Profit", value: "Closed {symbol} position\nProfit: +${profit} ({percentage}%)\nEntry: ${entry} → Exit: ${exit}\nThanks for the play @{mention}" },
+  { name: "Exit Signal - Big Win", value: "{symbol} ${strikePrice} Calls {expiration}\nClosed for +{percentage}% gain\nFrom ${cost} to ${sold}\nProfit: +${profit}\nAbsolute monster play!" },
+  { name: "Hold Update", value: "{symbol} update:\nCurrently up +{percentage}% on this position\nStill holding, target not hit yet\nEntry: ${entry} | Current: ${current}" },
+  { name: "Day P&L", value: "Day's P&L: +${profit}\n{wins} wins, {losses} losses\nAnother solid trading day!" },
+  { name: "Weekly Recap", value: "Week in review:\nTotal P&L: +${profit} ({percentage}%)\nBest trade: {symbol} +${bestProfit}\nAccount size: ${accountValue}\nOn to the next week!" },
+];
+
 export interface DiscordFormData {
   username: string;
   avatarColor: string;
@@ -24,6 +34,10 @@ export interface DiscordFormData {
   verified: boolean;
   channelName: string;
   embeddedImageDataUrl?: string;
+  notificationCount?: string;
+  showNotificationBadge: boolean;
+  typingUsers: string[];
+  showTypingIndicator: boolean;
 }
 
 interface DiscordFormProps {
@@ -54,6 +68,32 @@ export function DiscordForm({ data, onChange }: DiscordFormProps) {
       ...data,
       reactions: data.reactions.filter((_, i) => i !== index)
     });
+  };
+
+  const addTypingUser = () => {
+    onChange({
+      ...data,
+      typingUsers: [...data.typingUsers, "User"]
+    });
+  };
+
+  const updateTypingUser = (index: number, value: string) => {
+    const newTypingUsers = [...data.typingUsers];
+    newTypingUsers[index] = value;
+    onChange({ ...data, typingUsers: newTypingUsers });
+  };
+
+  const removeTypingUser = (index: number) => {
+    onChange({
+      ...data,
+      typingUsers: data.typingUsers.filter((_, i) => i !== index)
+    });
+  };
+
+  const applyMessageTemplate = (template: string) => {
+    if (template) {
+      onChange({ ...data, message: template });
+    }
   };
 
   return (
@@ -103,16 +143,30 @@ export function DiscordForm({ data, onChange }: DiscordFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="message" data-testid="label-message">Message</Label>
+        <div className="flex items-center justify-between">
+          <Label htmlFor="message" data-testid="label-message">Message</Label>
+          <Select onValueChange={applyMessageTemplate}>
+            <SelectTrigger className="w-[200px]" data-testid="select-message-template">
+              <SelectValue placeholder="Signal Templates" />
+            </SelectTrigger>
+            <SelectContent>
+              {MESSAGE_TEMPLATES.map((template) => (
+                <SelectItem key={template.name} value={template.value}>
+                  {template.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
         <Textarea
           id="message"
           data-testid="input-message"
           value={data.message}
           onChange={(e) => updateField('message', e.target.value)}
-          placeholder="Enter message (use @username for mentions)"
-          rows={4}
+          placeholder="Enter message or select a signal template above"
+          rows={6}
         />
-        <p className="text-xs text-muted-foreground">Use @username to create mentions</p>
+        <p className="text-xs text-muted-foreground">Use @username for mentions. Templates support {`{symbol}`}, {`{profit}`}, {`{percentage}`}, etc.</p>
       </div>
 
       <div className="space-y-2">
@@ -188,6 +242,86 @@ export function DiscordForm({ data, onChange }: DiscordFormProps) {
         <Label htmlFor="verified" className="cursor-pointer" data-testid="label-verified">
           Verified badge
         </Label>
+      </div>
+
+      <div className="space-y-3 border-t pt-6">
+        <h3 className="font-semibold text-sm">Notification Badge</h3>
+        <div className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            id="showNotificationBadge"
+            checked={data.showNotificationBadge}
+            onChange={(e) => updateField('showNotificationBadge', e.target.checked)}
+            className="w-4 h-4 rounded"
+            data-testid="checkbox-show-notification"
+          />
+          <Label htmlFor="showNotificationBadge" className="cursor-pointer" data-testid="label-show-notification">
+            Show notification badge
+          </Label>
+        </div>
+        {data.showNotificationBadge && (
+          <div className="space-y-2">
+            <Label htmlFor="notificationCount" data-testid="label-notification-count">Notification Count</Label>
+            <Input
+              id="notificationCount"
+              data-testid="input-notification-count"
+              value={data.notificationCount || "99"}
+              onChange={(e) => updateField('notificationCount', e.target.value)}
+              placeholder="e.g., 99"
+            />
+          </div>
+        )}
+      </div>
+
+      <div className="space-y-3 border-t pt-6">
+        <h3 className="font-semibold text-sm">Typing Indicator</h3>
+        <div className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            id="showTypingIndicator"
+            checked={data.showTypingIndicator}
+            onChange={(e) => updateField('showTypingIndicator', e.target.checked)}
+            className="w-4 h-4 rounded"
+            data-testid="checkbox-show-typing"
+          />
+          <Label htmlFor="showTypingIndicator" className="cursor-pointer" data-testid="label-show-typing">
+            Show typing indicator
+          </Label>
+        </div>
+        {data.showTypingIndicator && (
+          <>
+            <div className="flex items-center justify-between">
+              <Label data-testid="label-typing-users">Typing Users</Label>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={addTypingUser}
+                data-testid="button-add-typing-user"
+              >
+                <Plus className="w-4 h-4 mr-1" />
+                Add User
+              </Button>
+            </div>
+            {data.typingUsers.map((user, index) => (
+              <div key={index} className="flex items-center gap-2">
+                <Input
+                  value={user}
+                  onChange={(e) => updateTypingUser(index, e.target.value)}
+                  placeholder="Username"
+                  data-testid={`input-typing-user-${index}`}
+                />
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  onClick={() => removeTypingUser(index)}
+                  data-testid={`button-remove-typing-user-${index}`}
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+            ))}
+          </>
+        )}
       </div>
     </div>
   );
